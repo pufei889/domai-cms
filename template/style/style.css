@@ -1,0 +1,112 @@
+@font-face {
+    font-family: 'adventor';
+    src: url('../font/adventor.eot');
+    src: url('../font/adventor.woff2') format('woff2'),
+    url('../font/adventor.woff') format('woff'),
+    url('../font/adventor.ttf') format('truetype'),
+    url('../font/adventor.svg#TeXGyreAdventor-Regular') format('svg'),
+    url('../font/adventor.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+* {margin:0;padding:0}
+html,body{font-size:12px;font-family:adventor,verdana;background:#fff}
+a {text-decoration:none;color:#313131}
+ul,li,ol {list-style:none}
+h1,h2,h3,h4,h5,h6 {font-weight:100}
+.head {width:100%;height:80px;border-top:15px solid #313131;border-bottom:1px solid #ffc338}
+.menu {width:1200px;height:80px;margin:0 auto;}
+.menu .logo {width:180px;margin-top:15px}
+.menu nav {float:right;font-size:16px;margin-top:30px;margin-bottom:10px}
+.menu nav a  {margin:0 30px;line-height:40px}
+.menu nav a:hover {color:#ffc338}
+.banner {overflow:hidden;width:100%}
+.banner img {width:100%;max-width:1920px}
+.cols-3 {width:1200px;margin:50px auto;overflow:hidden;font-size:17px}
+.cols-3 .cols {float:left;width:33.33%}
+.cols-3 .cols span {color:#ffc338}
+.product-list ul {width:310px;height:180px;margin:5px auto;overflow:hidden;}
+.product-list li {float:left}
+.product-list li a {float:left;height:160px}
+.product-list h2 {float:left;width:100%;height:20px;line-height:20px;font-size:12px;text-align:center;background:#444;color:#fff}
+.main {width:100%;}
+article.single {width:1200px;margin:0 auto;font-size:14px;}
+article.single p {margin-bottom:20px}
+article.single header {float:left;width:95%;line-height:120px;font-size:18px;padding-left:5%;background:#eee}
+article.single header h1 {width:100%;margin:0 auto;font-weight:100}
+.breadcrumb {float:left;width:100%;height:30px;line-height:30px;font-size:12px;background:#ccc;color:#000}
+.breadcrumb li {float:left;margin:0 5px}
+.breadcrumb li a:hover {text-decoration:underline}
+article.single .entry-content {float:left;margin-top:20px;width:96%;padding:0 2%}
+
+.inquiry-form {width:1200px;margin:10px auto;font-family:Arial;font-size:12px;border-top:dotted 1px #ccc;padding-top:10px;overflow:hidden}
+.inquiry-form h3 {color:#ffc338;font-size:1.5em}
+.inquiry-form .required {color:#b92a21}
+.inquiry-form p {float:left;width:47.5%;height:50px;margin-top:5px;line-height:50px}
+.inquiry-form p.note {height:auto;line-height:normal}
+.inquiry-form p.note,.inquiry-form p.messenger,.inquiry-form p.product,.inquiry-form p.details,.inquiry-form p.submit {width:100%;clear:both}
+.inquiry-form p.name,.inquiry-form p.email {margin-right:5%}
+.inquiry-form p.product,.inquiry-form p.details {height:auto;line-height:20px}
+.inquiry-form p input#name,.inquiry-form p input#email,.inquiry-form p input#tel,.inquiry-form p input#area{width:200px;width:calc(97.5% - 65px);height:30px;line-height:30px}
+.inquiry-form p input#messenger {width:calc(100% - 298px);height:30px;line-height:30px}
+.inquiry-form p select{width:120px;height:30px;line-height:30px}
+.inquiry-form label{display:inline-block;width:65px;font-size:1.1em;color:#202020}
+.inquiry-form p.messenger label {width:150px}
+.inquiry-form p.details label {float:left}
+.inquiry-form p.details {margin-top:20px}
+.inquiry-form p input#messenger{margin-left:20px}
+.inquiry-form p.product input {margin-left:5px;margin-right:1px}
+.inquiry-form p.product input:nth-child(2){margin-left:0}
+.inquiry-form p textarea {width:98%;height:125px;padding:5px;margin-top:5px;resize:none}
+.inquiry-form p.submit input {width:128px;height:40px;color:#fff;background:#c10c0d;border:none;cursor:pointer;float:right}
+.related {width:1200px;margin:10px auto;font-size:14px;border-top:1px solid #ccc;padding-top:10px;text-align:center;overflow:hidden}
+.related .cols-1 {float:left;width:25%;margin:30px auto;line-height:20px;text-align:left;}
+.related .cols-1 h3 {font-size:16px;margin-bottom:10px;font-weight:bold}
+.related .cols-1 li {width:100%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.related .cols-1 a:hover {text-decoration:underline}
+.related .cols-3 {float:left;width:75%;margin-top:60px}
+.related .cols-3 li {float:left;width:20%;margin:0 2%}
+.related .cols-3 img {max-width:100%;}
+.related .cols-3 h4 {font-size:12px}
+.footer {width:100%;line-height:50px;background:#444;color:#fff;text-align:center}
+.footer span {display:block}
+.footer a {color:#fff;margin-left:10px}
+.footer a:hover {color:#ffc338}
+
+.content {width:1200px;margin:20px auto;margin-top:0px;overflow:hidden}
+.content .category-header {float:left;width:95%;line-height:120px;font-size:18px;padding-left:5%;background:#eee}
+.content article.post {float:left;width:98%;margin:20px auto 10px 2%;}
+.content article.post h2 {margin-bottom:10px;}
+.content article.post h2 a:hover {text-decoration:underline}
+.content article.post .viewmore {color:#ffc338;margin-left:20px}
+.content article.post .viewmore:hover {text-decoration:underline}
+.pages {float:left;width:100%;margin:20px auto;font-size:14px;font-family:Verdana}
+.pages ul li {float:left;height:30px;line-height:50px;margin-left:30px;}
+.pages ul li a {text-decoration:underline}
+.content .thumb {float:left;width:200px;}
+
+@media(max-width:1200px){
+    .menu {width:100%;}
+    .cols-3 {width:100%;}
+    .breadnav {width:100%}
+    article.single {width:100%}
+    .inquiry-form {width:96%;margin:0 2%}
+    .related {width:100%}
+    .content {width:100%};
+}
+@media(max-width:1100px){
+    .cols-3 .cols {width:90%;margin:10px 5%}
+}
+@media(max-width:700px){
+    .cols-3 {font-size:12px}
+    .cols-3 .cols {width:90%;margin:10px 5%}
+    .inquiry-form p.name {width:100%}
+    .inquiry-form p.email {width:100%}
+    .inquiry-form p.tel {display:none}
+    .inquiry-form p.area {display:none}
+    .related .posts {display:none}
+    .related .cols-3 {width:100%}
+    article.single header {font-size:14px;line-height:50px}
+    .content .category-header {font-size:14px;line-height:80px}
+    .entry-content {font-size:12px}
+}

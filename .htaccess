@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule ^(.*\.(html|htm))$ /$1.gz [L]
+
+<FilesMatch "\.(html|txt)\.gz$">
+    header set Content-Encoding gzip
+    header set Content-Type text/html
+</FilesMatch>
