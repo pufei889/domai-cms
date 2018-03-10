@@ -54,7 +54,7 @@ function renew_stat($category){
     }else{
         $stat["total"]+=1;
     }
-    $mysql->query('update stat set stat = '.serialize($stat).' where id =1');
+    $mysql->query('update stat set stat = "'.addslashes(serialize($stat)).'" where id =1');
 }
 //获取栏目数量
 function get_stat($category=null){

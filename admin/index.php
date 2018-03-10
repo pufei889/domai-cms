@@ -11,17 +11,18 @@ $post=array();
 if(@$_GET['action']=='del'){
     $id = $_GET['id'];
     $tmp = $mysql->getOne("select category,linkname from posts where id = $id");
-    $c=$tmp['category'];
-    $l=$tmp['linkname'];
-    if(!empty($c)){
+    if(!empty($tmp)){
         $mysql->query("delete from posts where id = $id");
+        $l=$tmp['linkname'];
+        $c=$tmp['category'];
+        unlink(ABSPATH.get_link_name($c)."/".str_replace("%post_id%",$id,str_replace("%post_name%",$l,permanlink)).".gz");
+        $c = $c==""?"top":$c;
         $tmp=$mysql->getOne("select stat from stat where id =1");
         $stat = @unserialize($tmp[0]);
         $stat[$c]=$stat[$c]-1;
         $stat['total']=$stat['total']-1;
         $mysql->query('update stat set stat = "'.addslashes(serialize($stat)).'" where id =1');
-        unlink(ABSPATH.get_link_name($c)."/".str_replace("%post_id%",$id,str_replace("%post_name%",$l,permanlink)).".gz");
-        echo "<script>window.history.go(-1);</script>";
+        echo "<script>window.location.reload();</script>";
         die;
     }
 }
@@ -64,9 +65,9 @@ while(have_posts()){
 ?>
     </table>
     <div class="pages">
-    <?php
-        the_paging_nav();
-    ?>
+<?php
+the_paging_nav();
+?>
     </div>
 </div>
 </body>
