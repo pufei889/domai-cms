@@ -5,48 +5,35 @@
  *
  */
 require_once("./init.php");
+if(!isset($_GET['pw']) || $_GET['pw']!=submitpasswd) die("Password Error, Updated Sitemap Error!");
 $total=get_stat();
-$mapcount=ceil($total/1000);
 $host=$_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'];
 $sitemaps=array();
-for($i=1;$i<=$mapcount;$i++){
-    if(file_exists(ABSPATH."sitemap-full-$i.xml")){
-        $urls="sitemap-full-$i.xml";
-        array_push($sitemaps,$urls);
-        continue;
-    }
+$i=1;
+while(1){
     $tmp = $mysql->getRows("select id,linkname,category,post_time from posts order by id desc limit ".($i-1)*1000 .",1000");
-    ob_start();
-    echo '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\r\n";
+    if(empty($tmp)) break;
+    $sitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<urlset>\r\n";
     foreach($tmp as $t){
         if($t['category']==''){
             $url= $host."/".str_replace("%post_id%",$t['id'],urlencode(str_replace("%post_name%",$t['linkname'],permanlink)));
         }else{
             $url = $host. "/".get_link_name($t['category'])."/".urlencode(str_replace("%post_id%",$t['id'],str_replace("%post_name%",$t['linkname'],permanlink)));
         }
-        echo "<url>\r\n<loc>".$url."</loc>\r\n</url>\r\n";
+        $sitemap .= "<url>\r\n<loc>".$url."</loc>\r\n</url>\r\n";
     }
-    echo "\r\n</urlset>";
-    $xml = ob_get_contents();
-    ob_end_clean();
+    file_put_contents(ABSPATH."sitemap-$i.xml",$sitemap."</urlset>");
     if(count($tmp)==1000){
-        $urls="sitemap-full-$i.xml";
-        array_push($sitemaps,$urls);
+        $i++;
     }else{
-        $urls="sitemap-$i.xml";
-        array_push($sitemaps,$urls);
+        break;
     }
-    file_put_contents(ABSPATH.$urls,$xml);
 }
 
-ob_start();
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-echo "\r\n";
-echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-foreach($sitemaps as $sitemap){
-    echo "<sitemap>\r\n<loc>$host/$sitemap</loc>\r\n</sitemap>";
+$sitemap='<?xml version="1.0" encoding="UTF-8"?>'."\r\n".'<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\r\n";
+while($i>0){
+    $sitemap.="<sitemap>\r\n<loc>$host/sitemap-$i.xml</loc>\r\n</sitemap>";
+    $i--;
 }
-echo "</sitemapindex>";
-$xml = ob_get_contents();
-ob_end_clean();
-file_put_contents(ABSPATH."sitemap.xml",$xml);
+$sitemap.="</sitemapindex>";
+file_put_contents(ABSPATH."sitemap.xml",$sitemap);
