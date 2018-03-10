@@ -1,0 +1,23 @@
+    <h2>Who We Are?</h2>
+    <p>Camelway Machinery, founded in 1983, now is one of the most largest manufacturer in China for Concrete and Aggregate Machine. We have 2 million square meters of production workshop, more than 500 employees, over the past 30 years, We have provide our customers around the world for nearly 5000 sets of equipment and various solutions.</p>
+    <h2>What We Do?</h2>
+    <p>As you Know, Camelway are large manufacturer for concrete and aggregate machines. <br>
+    First: We provide all kinds of single equipment for concrete and aggregate industry, like <strong>Twin shaft Mixer</strong>, <strong>Cement Silo</strong>,<strong>Aggregate bin</strong>,<strong>Screw conveyor</strong>,<strong>Jaw Crusher</strong>,<strong>Impact Crusher</strong>,<strong>Cone Crusher</strong>,<strong>VSI Crusher</strong>,<strong>Truck Mixer</strong>,<strong>Concrete Pump</strong>,etc.<br>
+    Second: We provide complete plant for concrete and aggregate industy, like <strong>concrete mixing plant</strong>, <strong>stone crushing plant</strong>, <strong>mobile crushing plant</strong>, <strong>manufactured sand making plant</strong>, etc.
+    </p>
+    <h2>How to get our service?</h2>
+    <p>If you need to get a quote for our products or get technical support, there are several ways to contact us:<br>
+    1, contact our online customer service, this will be able to get a real-time reply, online customer service work hours from Monday to Friday, 9:00-20:00 (Beijing time). Please note that online service can only provide regular service.<br>
+    2, send us an email, please send email to info@camelway.com.<br>
+    3, fill in the form below, we will contact you as soon as possible.</p>
+    <div class="easy-inquiry">
+        <h3>Inquiry</h3>
+        <form action="//data.camelway.com/post.php" method="post">
+            <p class="half"><label>Name:</label><input name="name" type="text"></p>
+            <p class="half"><label>Email:</label><input name="email" type="text"></p>
+            <p class="half"><label>Product:</label><select name="product"><option value="">Please Select</option><option value="Batching Plant">Batching Plant</option><option value="Crushing Plant">Crushing Plant</option><option value="Stone Crusher">Stone Crusher</option><option value="Other">Other</option></select></p>
+            <p class="half"><label>Whatsapp:</label><input name="tel" type="text"></p>
+            <p class="full"><textarea name="message" placeholder="Please enter your detailed requirements, such as the planned capacity, applications, etc."></textarea></p>
+            <p class="submit"><input type="Submit" value="Submit"></p>
+        </form> 
+    </div>

@@ -20,9 +20,9 @@ for($i=1;$i<=$mapcount;$i++){
     echo '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\r\n";
     foreach($tmp as $t){
         if($t['category']==''){
-            $url= $host."/".str_replace("%post_id%",$t['id'],str_replace("%post_name%",$t['linkname'],permanlink));
+            $url= $host."/".str_replace("%post_id%",$t['id'],urlencode(str_replace("%post_name%",$t['linkname'],permanlink)));
         }else{
-            $url = $host. "/".get_link_name($t['category'])."/".str_replace("%post_id%",$t['id'],str_replace("%post_name%",$t['linkname'],permanlink));
+            $url = $host. "/".get_link_name($t['category'])."/".urlencode(str_replace("%post_id%",$t['id'],str_replace("%post_name%",$t['linkname'],permanlink)));
         }
         echo "<url>\r\n<loc>".$url."</loc>\r\n</url>\r\n";
     }

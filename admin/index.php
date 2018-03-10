@@ -4,8 +4,9 @@
  */
 require_once("./auth.php");
 $page = isset($_GET["page"])?(int)$_GET['page']:1;
-$offset=($page-1)*20;
-$posts = $mysql->getRows("select id,title,category,linkname from posts order by id desc limit $offset, 20");
+$numperpage=25;
+$offset=($page-1)*$numperpage;
+$posts = $mysql->getRows("select id,title,category,linkname from posts order by id desc limit $offset, $numperpage");
 $post=array();
 if(@$_GET['action']=='del'){
     $id = $_GET['id'];
@@ -46,6 +47,7 @@ html,body {width:100%;height:100%}
     <ul>
         <li><a href="./">内容管理</a></li>
         <li><a href="./add.php">添加管理</a></li>
+        <li><a href="./fix.php">数据修复</a></li>
     </ul>
 </div>
 <div class="right">

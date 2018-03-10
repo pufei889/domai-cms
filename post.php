@@ -40,7 +40,7 @@ if($mysql->get_error()==0){
     $tmp = $mysql->getOne("select last_insert_id()");
     $postid = $tmp[0];
     if(save_post_html()){
-        echo '{"url":'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fresh.php","result":"Publish Success!"}';
+        echo '{"url":"'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fresh.php","result":"Publish Success!"}';
         renew_stat($category);
     }else{
         echo '{"url":"https://www.baidu.com/","result":"Publish Success, But Failed to Generate a Page!"}';

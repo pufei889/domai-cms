@@ -43,6 +43,7 @@ function renew_stat($category){
     }else{
         $stat=array();
     }
+    if($category=='') $category='top';
     if(!isset($stat[$category])){
         $stat[$category]=1;
     }else{
@@ -53,9 +54,8 @@ function renew_stat($category){
     }else{
         $stat["total"]+=1;
     }
-    $mysql->query('update stat set stat = "'.addslashes(serialize($stat)).'" where id =1');
+    $mysql->query('update stat set stat = '.serialize($stat).' where id =1');
 }
-
 //获取栏目数量
 function get_stat($category=null){
     global $mysql;
@@ -66,19 +66,22 @@ function get_stat($category=null){
     }
     if($category==null){
         return $stat['total'];
+    }else if($category==''){
+        return $stat['top'];
     }else if(isset($stat[$category])){
         return $stat[$category];
     }else{
         return 0;
     }
 }
+
 function add_filter($point,$callback){
     global $callbackfunctions;
     if(!in_array($point,array("the_content","the_title"))){
         return false;
     }
     $callbackfunctions[$point]=array();
-   array_push($callbackfunctions[$point],$callback); 
+    array_push($callbackfunctions[$point],$callback); 
 }
 
 $callbackfunctions=array();
@@ -103,8 +106,8 @@ function save_post_html(){
     if(file_exists(ABSPATH."template/functions.php")){
         require_once(ABSPATH."template/functions.php");
     }
-    if(file_exists(ABSPATH."template/".$category_path.".single.php")){
-        require(ABSPATH."template/".$category_path.".php");
+    if(file_exists(ABSPATH."template/".$category_path."-single.php")){
+        require(ABSPATH."template/".$category_path."-single.php");
     }else if(file_exists(ABSPATH."template/single.php")){
         require(ABSPATH."template/single.php");
     }else{
@@ -118,7 +121,7 @@ function save_post_html(){
         $filename=$filename.".gz";
     }
     if(!file_exists(ABSPATH.$category_path)){
-        mkdir(ABSPATH."/".$category_path);
+        mkdir(ABSPATH."/".$category_path,"0777");
         if(file_exists(ABSPATH."template/".$category_path."-category.php")){
             $templatecontent=file_get_contents(ABSPATH."include/category.php").file_get_contents(ABSPATH."template/".$category_path."-category.php");
             file_put_contents(ABSPATH.$category_path."/index.php",$templatecontent);
@@ -260,8 +263,12 @@ function the_post_category(){
 function the_paging_nav(){
     global $page;
     global $category;
+    global $numperpage;
+    if($numperpage==NULL){
+        $numperpage=pagecount;
+    }
     $num = get_stat($category);
-    $totalpage = ceil($num/pagecount);
+    $totalpage = ceil($num/$numperpage);
     $nextpage = $totalpage > $page ? "<li><a href=\"./?page=".($page+1)."\">Next Page</a></li>":"";
     $prepage = $page > 1 ? "<li><a href=\"./?page=".($page-1)."\">Previous Page</a></li>":"";
     $startpage = $page-2>0?$page-2:1;
@@ -290,7 +297,7 @@ function related_post($num=null,$category=null){
     global $relatedposts;
     $relatedposts=array();
     if($category==null){
-        $where= "1 = 1 ";
+        $where= "category <> ''";
     }else{
         $where = "category= \"$category\" ";
     }
@@ -299,15 +306,15 @@ function related_post($num=null,$category=null){
     }
     $totalnum = get_stat($category);
     if($totalnum<=$num*4){
-        $tmp = $mysql->getRows("select * from posts where $where limit 0,$totalnum");
+        $tmp = $mysql->getRows("select * from posts where $where order by rand() limit 0,$num");
         $relatedposts=$tmp; 
     }else{
         while(count($relatedposts)<$num){
-                $id  = rand(1,$totalnum);
-                $post = $mysql->getOne("select * from posts where $where and id = $id limit 0,1");
-                if(!in_array($post,$relatedposts) && !empty($post)){
-                        array_push($relatedposts,$post);
-                }
+            $id  = rand(1,$totalnum);
+            $post = $mysql->getOne("select * from posts where $where and id = $id limit 0,1");
+            if(!in_array($post,$relatedposts) && !empty($post)){
+                array_push($relatedposts,$post);
+            }
         }
     }
     return $relatedposts;
@@ -318,7 +325,7 @@ function have_related_post(){
     if(count($relatedposts)==0){
         return false;
     }else{
-       $relatedpost = array_shift($relatedposts);
+        $relatedpost = array_shift($relatedposts);
         return true;
     }
 }
@@ -369,7 +376,7 @@ function get_the_rand_image($seed=NULL,$dir="/uploads/batching/"){
         return "";
     }
     closedir($dd);
-    $offset = hash("crc32",$seed)%count($tmp);
+    $offset = sprintf("%u",crc32(substr($seed,0,2).strlen($seed)))%count($tmp);
     return $dir.$tmp[$offset];
 }
 function the_rand_image($seed=NULL,$dir="/uploads/batching/"){
@@ -384,7 +391,7 @@ function the_rand_image($seed=NULL,$dir="/uploads/batching/"){
         return "";
     }
     closedir($dd);
-    $offset = hash("crc32",$seed)%count($tmp);
+    $offset = sprintf("%u",crc32(substr($seed,0,2).strlen($seed)))%count($tmp);
     echo $dir.$tmp[$offset];
     return $dir.$tmp[$offset];
 }

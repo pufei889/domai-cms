@@ -3,19 +3,15 @@
  *后台管理界面
  */
 require_once("./auth.php");
-
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="utf-8">
 <title>Simple Content Mangement System</title>
-<link href="./editor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="./editor/third-party/jquery.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="./editor/umeditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="./editor/umeditor.min.js"></script>
-<script type="text/javascript" src="./editor/lang/zh-cn/zh-cn.js"></script>
-
+<script type="text/javascript" charset="utf-8" src="./editor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="./editor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="./editor/lang/zh-cn/zh-cn.js"></script>
 <style>
 * {margin:0;padding:0}
 html,body {width:100%;height:100%}
@@ -124,6 +120,7 @@ html,body {width:100%;height:100%}
         label {width:100px;display:inline-block}
         input[type="text"] {width:500px;height:25px;line-height:25px;margin-top:10px}
         input[type="submit"] {width:80px;height:30px;line-height:30px;margin-top:30px;}
+        form p:nth-child(3) {margin-top:30px}
 </style>
 </head>
 <body>
@@ -131,18 +128,19 @@ html,body {width:100%;height:100%}
     <ul>
         <li><a href="./">内容管理</a></li>
         <li><a href="./add.php">添加管理</a></li>
+        <li><a href="./fix.php">数据修复</a></li>
     </ul>
 </div>
 <div class="right">
   <form action="../post.php?action=save&secret=yht123hito" method="post">
         <p><label>标题</label><input name="post_title" type="text"></p>
         <p><label>分类</label><input name="post_category" type="text"></p>
-        <p><label>内容</label><br/><script type="text/plain" id="myEditor" name="post_content" style="width:1000px;height:240px;"></script></p>
+        <p><script type="text/plain" id="myEditor" name="post_content" style="width:1000px;height:240px;"></script></p>
         <p><input type="submit" value="提交"></p>
     </form>
 </div>
 <script type="text/javascript">
-    var um = UM.getEditor('myEditor');
+var ue = UE.getEditor('myEditor')
 </script>
 </body>
 </html>

@@ -12,9 +12,10 @@
         <a href="/"><img src="/template/images/logo.png" alt="logo" class="logo"></a>
         <nav>
             <a href="/">Home</a>
-            <a href="/concrete-batching-plant/">Concrete Batching Plant</a>
-            <a href="/news/">News</a>
-            <a href="/about/">ABout Us</a>
+            <a href="/batching-plant/">Concrete Batching Plant</a>
+            <a href="/stone-crusher/">Stone Crusher</a>
+            <a href="/mobile-crusher/">Mobile Crusher</a>
+            <a href="/about.html">ABout Us</a>
         </nav>
     </div>
 </div>
@@ -38,18 +39,11 @@
         <p class="area"><label for="area">Area:</label><input type="text" name="country_name" id="area"></p>
         <p class="messenger"><label for="messenger">Instant Messenger:</label><select name="tel"><option value=" whatsapp:">whatsapp</option><option value=" skype:">skype</option></select><input type="text" name="tel" id="messenger"></p>
         <p class="product"><label>Product:</label>
-            <input type="checkbox" name="product" value="Concrete Batching Plant">Concrete Batching Plant
-            <input type="checkbox" name="product" value="Continuous concrete mixing plant">Continuous Concrete Mixing Plant
+            <input type="checkbox" name="product" value="Concrete Mixing Plant">Concrete Mixing Plant
             <input type="checkbox" name="product" value="Concrete Mixer">Concrete Mixer
-            <input type="checkbox" name="product" value="Truck Mixer">Truck Mixer
-            <input type="checkbox" name="product" value="Concrete Pump">Concrete Pump
             <input type="checkbox" name="product" value="Crushing Plant">Crushing Plant
-            <input type="checkbox" name="product" value="Mobile Crusher">Mobile Crusher
-            <input type="checkbox" name="product" value="Jaw Crusher">Jaw Crusher
-            <input type="checkbox" name="product" value="Impact Crusher">Impact Crusher
-            <input type="checkbox" name="product" value="Cone Crusher">Cone Crusher
-            <input type="checkbox" name="product" value="VSI Crusher">VSI Crusher
-            Other: <input type="hidden" name="product" value="">
+            <input type="checkbox" name="product" value="Stone Crusher">Stone Crusher
+            Other: <input type="text" name="product" value="">
         </p>
         <p class="details"><label><span class="required">*</span>Details:</label>
         <textarea placeholder="Please enter your detailed requirements, such as the planned capacity, applications, etc." name="message"></textarea>
@@ -73,17 +67,32 @@ while(have_related_post()){
         </div>
         <div class="cols-3">
             <ul>
-                <li><a href="#"><img src="/template/images/batching.jpg" alt="concrete batching plant"></a><h4>Concrete Batching Plant</h4></li>
-                <li><a href="#"><img src="/template/images/crushing.jpg" alt="stone crushing plant"></a><h4>Stone Crushing Plant</h4></li>
-                <li><a href="#"><img src="/template/images/mixing.jpg" alt="Continuous Mixing Plant"></a><h4>Continuous Mixing Plant</h4></li>
-                <li><a href="#"><img src="/template/images/mobile.jpg" alt="Mobile Crushing Plant"></a><h4>Mobile Crushing Plant</h4></li>
+                <li><a href="/batching-plant/"><img src="/template/images/batching.jpg" alt="concrete batching plant"></a><h4>Concrete Batching Plant</h4></li>
+                <li><a href="/fixed-crusher/"><img src="/template/images/crushing.jpg" alt="stone crushing plant"></a><h4>Stone Crushing Plant</h4></li>
+                <li><a href="/mixing-plant/"><img src="/template/images/mixing.jpg" alt="Continuous Mixing Plant"></a><h4>Continuous Mixing Plant</h4></li>
+                <li><a href="/mobile-crusher/"><img src="/template/images/mobile.jpg" alt="Mobile Crushing Plant"></a><h4>Mobile Crushing Plant</h4></li>
             </ul>
         </div>
     </div>
 </div>
 <div class="footer">
     <div class="text">Address: No. 466, Zheng Shang Road, Zhengzhou city China.  Email: info@camelway.com   Whatsapp:008618838109566</div>
-    <div class="text"> Copyright ©Camelway Machinery <a href="/privacy/">Privacy Policy</a></div>
+    <div class="text"> Copyright &copy;Camelway Machinery <a href="/privacy-policy.html">Privacy Policy</a></div>
 </div>
+<script language="javascript" src="https://pkt.zoosnet.net/JS/LsJS.aspx?siteid=PKT10517310&lng=en&float=1"></script>
+<script>
+(function(url){
+ var xhr = new XMLHttpRequest();     
+ xhr.open('GET', url, true);
+ xhr.send();
+ xhr.onreadystatechange = function() {
+ if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
+     var html =  document.createElement('div');
+     html.className="breif";
+     html.innerHTML =  xhr.responseText;
+     document.getElementsByClassName("single")[0].insertBefore(html,document.getElementsByClassName("entry-content")[0]);
+ }
+ };
+ })("/template/intro.txt");
 </body>
 </html>

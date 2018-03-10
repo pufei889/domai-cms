@@ -20,9 +20,10 @@ $(function(){
         <a href="/"><img src="/template/images/logo.png" alt="logo" class="logo"></a>
         <nav>
             <a href="/">Home</a>
-            <a href="/concrete-batching-plant/">Concrete Batching Plant</a>
-            <a href="/news/">News</a>
-            <a href="/about/">ABout Us</a>
+            <a href="/batching-plant/">Concrete Batching Plant</a>
+            <a href="/stone-crusher/">Stone Crusher</a>
+            <a href="/mobile-crusher/">Mobile Crusher</a>
+            <a href="/about.html">ABout Us</a>
         </nav>
     </div>
 </div>
@@ -48,5 +49,6 @@ $(function(){
     <div class="text">Address: No. 466, Zheng Shang Road, Zhengzhou city China.  Email: info@camelway.com   Whatsapp:008618838109566</div>
     <div class="text"> Copyright &copy;Camelway Machinery</div>
 </div>
+<script language="javascript" src="https://pkt.zoosnet.net/JS/LsJS.aspx?siteid=PKT10517310&lng=en&float=1"></script>
 </body>
 </html>
