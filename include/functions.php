@@ -101,7 +101,7 @@ function save_post_html(){
     global $relatedpost;
 
     global $category_path;
-    $category_path=str_replace(" ","-",$category);
+    $category_path=get_link_name($category);
     ob_start();
     if(file_exists(ABSPATH."template/functions.php")){
         require_once(ABSPATH."template/functions.php");
@@ -121,7 +121,7 @@ function save_post_html(){
         $filename=$filename.".gz";
     }
     if(!file_exists(ABSPATH.$category_path)){
-        mkdir(ABSPATH."/".$category_path,"0777");
+        mkdir(ABSPATH."/".$category_path,0777);
         if(file_exists(ABSPATH."template/".$category_path."-category.php")){
             $templatecontent=file_get_contents(ABSPATH."include/category.php").file_get_contents(ABSPATH."template/".$category_path."-category.php");
             file_put_contents(ABSPATH.$category_path."/index.php",$templatecontent);
