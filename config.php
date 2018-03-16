@@ -15,6 +15,8 @@ define("dbpasswd","");
 //后台用户名和密码
 define("user","camelway123");
 define("password","123camelway");
+//网站配置
+define("sitename","Concrete batching Plant, Stone Crushing Plant");
 //列表页调用数量
 define("pagecount",10);
 //html是否压缩: 推荐

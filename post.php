@@ -39,6 +39,7 @@ $mysql->query("insert into posts (title,linkname,description,category,post_time)
 if($mysql->get_error()==0){
     $tmp = $mysql->getOne("select last_insert_id()");
     $postid = $tmp[0];
+    $post=$mysql->getOne("select * from posts where id = $postid");
     if(save_post_html()){
         echo '{"url":"'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fresh.php?pw='.submitpasswd.'","result":"Publish Success!"}';
         renew_stat($category);

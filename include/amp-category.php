@@ -1,5 +1,5 @@
 <?php
-require_once("../init.php");
+require_once("../../init.php");
 $page = isset($_GET["page"])?(int)$_GET['page']:1;
 $numperpage=pagecount;
 if($page<1){
@@ -17,7 +17,8 @@ if(empty($posts)){
     header("HTTP/1.1 404 Not Found");
     die;
 }
-$category_path=get_link_name($category);
+$isamp=true;
 $iscategory=true;
+$category_path=get_link_name($category);
 header("Cache-Control: public,max-age=86400");
 ?>

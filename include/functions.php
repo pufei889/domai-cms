@@ -84,28 +84,38 @@ function add_filter($point,$callback){
     array_push($callbackfunctions[$point],$callback); 
 }
 
-$callbackfunctions=array();
 //相关文章全局函数
-$relatedposts=array();
-$relatedpost=array();
+$callbackfunctions=array();
+$posts=array();
+$post=array();
+$isamp=false;
+$issingle=false;
+$ishome=false;
+$iscategory=false;
 //生成静态文章页面
 function save_post_html(){
+    //全局变量
+    global $posts;
+    global $posts;
+    global $callbackfunctions;
+    global $isamp;
+    global $issingle;
+    //文章变量，从发布接口获取
     global $title;
     global $content;
     global $category;
     global $linkname;
     global $postid;
-    global $callbackfunctions;
-    //相关文章全局函数
-    global $relatedposts;
-    global $relatedpost;
 
-    global $category_path;
     $category_path=get_link_name($category);
-    ob_start();
+
+    //引入模板functions
     if(file_exists(ABSPATH."template/functions.php")){
         require_once(ABSPATH."template/functions.php");
     }
+    //HTML Single
+    $issingle=true;
+    ob_start();
     if(file_exists(ABSPATH."template/".$category_path."-single.php")){
         require(ABSPATH."template/".$category_path."-single.php");
     }else if(file_exists(ABSPATH."template/single.php")){
@@ -116,12 +126,25 @@ function save_post_html(){
     $html = ob_get_contents();
     ob_end_clean();
     $filename=ABSPATH.$category_path."/".str_replace("%post_id%",$postid,str_replace("%post_name%",$linkname,permanlink));
-    if(compress===true){
-        $html=gzencode($html);
-        $filename=$filename.".gz";
+    //AMP Single
+    ob_start();
+    $content=amp_filter($content);
+    $isamp=true;
+    if(file_exists(ABSPATH."template/amp/".$category_path."-single.php")){
+        require(ABSPATH."template/amp/".$category_path."-single.php");
+    }else if(file_exists(ABSPATH."template/amp/single.php")){
+        require(ABSPATH."template/amp/single.php");
     }
+    $amphtml=ob_get_contents();
+    $isamp=false;
+    $issingle=false;
+    ob_end_clean();
+    $ampfilename=ABSPATH.$category_path."/amp/".str_replace("%post_id%",$postid,str_replace("%post_name%",$linkname,permanlink));
+    //category directory init
     if(!file_exists(ABSPATH.$category_path)){
         mkdir(ABSPATH."/".$category_path,0777);
+        mkdir(ABSPATH."/".$category_path."/amp/",0777);
+        //html category
         if(file_exists(ABSPATH."template/".$category_path."-category.php")){
             $templatecontent=file_get_contents(ABSPATH."include/category.php").file_get_contents(ABSPATH."template/".$category_path."-category.php");
             file_put_contents(ABSPATH.$category_path."/index.php",$templatecontent);
@@ -131,23 +154,85 @@ function save_post_html(){
         }else{
             return false;
         }
+        //amp category
+        if(file_exists(ABSPATH."template/amp/".$category_path."-category.php")){
+            $templatecontent=file_get_contents(ABSPATH."include/amp-category.php").file_get_contents(ABSPATH."template/amp/".$category_path."-category.php");
+            file_put_contents(ABSPATH.$category_path."/amp/index.php",$templatecontent);
+        }else if(file_exists(ABSPATH."template/amp/category.php")){
+            $templatecontent=file_get_contents(ABSPATH."/include/amp-category.php").file_get_contents(ABSPATH."template/amp/category.php");
+            file_put_contents(ABSPATH.$category_path."/amp/index.php",$templatecontent);
+        }
+    }
+    //gz encode and write
+    if(compress===true){
+        $html=gzencode($html);
+        $filename=$filename.".gz";
+        $amphtml=gzencode($amphtml);
+        $ampfilename=$ampfilename.".gz";
     }
     @file_put_contents($filename,$html,LOCK_EX);
+    if(strlen($amphtml)>=10){
+        @file_put_contents($ampfilename,$amphtml,LOCK_EX);
+    }
     if(file_exists($filename) && filesize($filename)>0){
         return true;
     }
     return false;
 }
 
-function the_title(){
-    global $title,$callbackfunctions;
-    if(!empty($callbackfunctions['the_title'])){
-        foreach($callbackfunctions['the_title'] as $callback){
-            $title = $callback($title);
-        }
-    } 
-    echo $title;
-    return $title;
+//把不符合AMP规范的标签替换
+//https://www.ampproject.org/zh_cn/docs/fundamentals/spec
+function amp_filter($content){
+    $patterns=array("/<img([^>]*)>/i","/<video([^>]*)>/i","/<\/video>/i","/<audio([^>]*)>/i","/<\/audio>/i","/<iframe([^>]*)>/i","/<\/iframe>/i");
+    $replacements=array('<amp-img${1} layout="responsive"></amp-img>','<amp-video${1}>',"</amp-video>",'<amp-audio${1}>',"</amp-audio>",'<amp-iframe${1}>',"</amp-iframe>");
+    $content = preg_replace($patterns,$replacements,$content);
+    return $content; 
+}
+//判断是否为amp页面
+function is_amp(){
+    global $isamp;
+    if($isamp==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+//是否为首页
+function is_home(){
+    global $ishome;
+    if($ishome==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+//是否为内容页面
+function is_single(){
+    global $issingle;
+    if($issingle==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+//是否为分类页
+function is_category(){
+    global $iscategory;
+    if($iscategory==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//把css文件导入到html中，主要在amp中使用
+function importcss($css){
+    $bug=debug_backtrace();
+    $path=dirname($bug[0]['file']);
+    $path=realpath($path."/".$css);
+    $style=file_get_contents($path);
+    $style=str_replace(array("\r","\n","\t",";}"),array("",""," ","}"),$style);
+    echo $style;
 }
 function get_the_title(){
     global $title,$callbackfunctions;
@@ -158,15 +243,8 @@ function get_the_title(){
     } 
     return $title;
 }
-function the_content(){
-    global $content,$callbackfunctions;
-    if(!empty($callbackfunctions['the_content'])){
-        foreach($callbackfunctions['the_content'] as $callback){
-            $content = $callback($content);
-        }
-    } 
-    echo $content;
-    return $content;
+function the_title(){
+    echo get_the_title();
 }
 function get_the_content(){
     global $content,$callbackfunctions;
@@ -177,12 +255,8 @@ function get_the_content(){
     } 
     return $content;
 }
-function the_bread_nav(){
-    global $linkname;
-    global $category;
-    global $category_path;
-    echo "<ol class=\"breadcrumb\"><li><a href=\"/\">Home</a> ›</li>\r\n <li><a href=\"/$category_path/\">$category</a></li></ol>";
-    return "<ol class=\"breadcrumb\"><li><a href=\"/\">Home</a> ›</li>\r\n <li><a href=\"/$category_path/\">$category</a></li></ol>";
+function the_content(){
+    echo get_the_content(); 
 }
 function get_the_bread_nav(){
     global $linkname;
@@ -190,17 +264,26 @@ function get_the_bread_nav(){
     global $category_path;
     return "<ol class=\"breadcrumb\"><li><a href=\"/\">Home</a> ›</li>\r\n <li><a href=\"/$category_path/\">$category</a></li></ol>";
 }
+function the_bread_nav(){
+    echo get_the_bread_nav();
+}
+function get_the_amp_bread_nav(){
+    global $linkname;
+    global $category;
+    global $category_path;
+    return "<ol class=\"breadcrumb\"><li><a href=\"/?amp\">Home</a> ›</li>\r\n <li><a href=\"/$category_path/amp/\">$category</a></li></ol>";
+}
+function the_amp_bread_nav(){
+    echo get_the_amp_bread_nav();
+}
 function get_the_category(){
     global $category;
     return $category;
 }
 function the_category(){
-    global $category;
-    echo $category;
-    return $category;
+    echo get_the_category();
 }
 
-//以下为列表页使用函数：只能在列表页使用
 function have_posts(){
     global $posts,$post;
     if(!isset($posts) || empty($posts)){
@@ -210,28 +293,40 @@ function have_posts(){
         return true;
     }
 }
-function the_post_description(){
+
+function get_the_post_description($len=500){
     global $post;
-    echo $post['description'];
-    return $post['description'];
+    return mb_substr($post['description'],0,$len);
 }
-function get_the_post_description(){
-    global $post;
-    echo $post['description'];
-    return $post['description'];
+function the_post_description($len){
+    echo get_the_post_description($len);
 }
-function the_post_link(){
-    global $post;
-    $link ="/".get_link_name($post['category']).'/'.str_replace("%post_id%",$post['id'],str_replace("%post_name%",$post['linkname'],permanlink));
-    $link=str_replace("//","/",$link);
-    echo $link;
-    return $link;
-}
+
 function get_the_post_link(){
     global $post,$category;
     $link ="/".get_link_name($post['category']).'/'.str_replace("%post_id%",$post['id'],str_replace("%post_name%",$post['linkname'],permanlink));
     $link=str_replace("//","/",$link);
     return $link;
+}
+function the_post_link(){
+    echo  get_the_post_link();
+}
+function get_the_amp_post_link(){
+    global $post,$category;
+    $link ="/".get_link_name($post['category']).'/amp/'.str_replace("%post_id%",$post['id'],str_replace("%post_name%",$post['linkname'],permanlink));
+    $link=str_replace("//","/",$link);
+    return $link;
+}
+function the_amp_post_link(){
+    echo get_the_amp_post_link();
+}
+
+function get_the_post_time(){
+    global $post;
+    return $post["post_time"];
+}
+function the_post_time(){
+    echo get_the_post_time();
 }
 function the_post_id(){
     global $post;
@@ -291,11 +386,9 @@ function the_paging_nav(){
     return NUll;
 }
 
-//以下为相关文章调用函数，所有页面通用
-function related_post($num=null,$category=null){
-    global $mysql;
-    global $relatedposts;
-    $relatedposts=array();
+//以下为文章调用函数，所有页面通用
+function latest_post($num,$category=null){
+    global $mysql,$posts;
     if($category==null){
         $where= "category <> ''";
     }else{
@@ -304,21 +397,21 @@ function related_post($num=null,$category=null){
     if($num==null){
         $num=5;
     }
-    $totalnum = get_stat($category);
-    if($totalnum<=$num*4){
-        $tmp = $mysql->getRows("select * from posts where $where order by rand() limit 0,$num");
-        $relatedposts=$tmp; 
-    }else{
-        while(count($relatedposts)<$num){
-            $id  = rand(1,$totalnum);
-            $post = $mysql->getOne("select * from posts where $where and id = $id limit 0,1");
-            if(!in_array($post,$relatedposts) && !empty($post)){
-                array_push($relatedposts,$post);
-            }
-        }
-    }
-    return $relatedposts;
+    $posts=$mysql->getRows("select * from posts where $where order by id desc limit 0,$num");
 }
+function rand_post($num=null,$category=null){
+    global $mysql,$posts;
+    if($category==null){
+        $where= "category <> ''";
+    }else{
+        $where = "category= \"$category\" ";
+    }
+    if($num==null){
+        $num=5;
+    }
+    $posts=$mysql->getRows("select * from posts where $where order by rand() limit 0,$num");
+}
+/*
 function have_related_post(){
     global $relatedposts;
     global $relatedpost;
@@ -339,11 +432,11 @@ function get_the_related_title(){
 }
 function get_the_related_time(){
     global $relatedpost;
-    return $relatedpost["time"];
+    return $relatedpost["post_time"];
 }
 function the_related_post_time(){
     global $relatedpost;
-    echo $relatedpost["time"];
+    echo $relatedpost["post_time"];
 }
 function get_the_related_link(){
     global $relatedpost;
@@ -354,15 +447,20 @@ function get_the_related_link(){
     }
 }
 function the_related_link(){
+    echo get_the_related_link();
+}
+function get_the_amp_related_link(){
     global $relatedpost;
     if($relatedpost['category']==''){
-        echo "/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
-        return "/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
+        return "/amp/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
     }else{
-        echo "/".get_link_name($relatedpost['category'])."/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
-        return "/".get_link_name($relatedpost['category'])."/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
+        return "/".get_link_name($relatedpost['category'])."/amp/".str_replace("%post_id%",$relatedpost['id'],str_replace("%post_name%",$relatedpost['linkname'],permanlink));
     }
 }
+function the_amp_related_link(){
+    echo get_the_amp_related_link();
+}
+*/
 //以下为获取随机文章的函数，所有页面通用
 function get_the_rand_image($seed=NULL,$dir="/uploads/batching/"){
     $imagedir=ABSPATH.$dir;
@@ -394,4 +492,53 @@ function the_rand_image($seed=NULL,$dir="/uploads/batching/"){
     $offset = sprintf("%u",crc32(substr($seed,0,2).strlen($seed)))%count($tmp);
     echo $dir.$tmp[$offset];
     return $dir.$tmp[$offset];
+}
+
+function get_header(){
+    if(!is_amp()){
+        require_once(ABSPATH."template/header.php");
+    }else{
+        require_once(ABSPATH."template/amp/header.php");
+    }
+}
+function get_footer(){
+    if(!is_amp()){
+        require_once(ABSPATH."template/footer.php");
+    }else{
+        require_once(ABSPATH."template/amp/footer.php");
+    }
+}
+function get_sidebar(){
+    if(!is_amp()){
+        require_once(ABSPATH."template/aside.php");
+    }else{
+        require_once(ABSPATH."template/amp/aside.php");
+    }
+}
+function comment_form(){
+    if(!is_amp()){
+        require_once(ABSPATH."template/comments.php");
+    }else{
+        require_once(ABSPATH."template/amp/comments.php");
+    }
+}
+function the_amp_html(){
+    if(is_home()){
+        echo "<link rel=\"amphtml\" href=\"/?amp\">\r\n";
+    }else if(is_category()){
+        global $category_path;
+        echo "<link rel=\"amphtml\" href=\"/".$category_path."/amp/\">\r\n";
+    }else if(is_single()){
+        echo "<link rel=\"amphtml\" href=\"".get_the_amp_post_link()."\">\r\n";
+    }
+}
+function the_amp_canonical(){
+ if(is_home()){
+        echo "<link rel=\"canonical\" href=\"/\">\r\n";
+    }else if(is_category()){
+        global $category_path;
+        echo "<link rel=\"canonical\" href=\"/".$category_path."\">\r\n";
+    }else if(is_single()){
+        echo "<link rel=\"canonical\" href=\"".get_the_post_link()."\">\r\n";
+    }
 }

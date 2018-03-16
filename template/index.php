@@ -1,54 +1,62 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Concrete Batching Plant Manufacturer Since 1983 - Camelway Machinery</title>
-<link rel="stylesheet" type="text/css" media="all" href="/template/style/style.css"/>
-<script src="/template/js/jquery.js"></script>
-<script src="/template/js/common.js"></script>
-<script>
-$(function(){
-    $(".product-list ul").scroll("left",6000,1000);
-    $(".banner").scroll("right",8000,2000);
-})
-</script>
-</head>
-<body>
-<div class="head">
-    <div class="menu">
-        <a href="/"><img src="/template/images/logo.png" alt="logo" class="logo"></a>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/batching-plant/">Concrete Batching Plant</a>
-            <a href="/stone-crusher/">Stone Crusher</a>
-            <a href="/mobile-crusher/">Mobile Crusher</a>
-            <a href="/about.html">ABout Us</a>
-        </nav>
+<?php
+get_header();
+?>
+    <div class="banner">
+        <img src="/template/images/banner.jpg" alt="">
     </div>
-</div>
-<div class="banner">
-    <img src="/template/images/banner1.jpg" alt="concrete batching plant">
-    <img src="/template/images/banner2.jpg" alt="stone crushing plant">
-    <img src="/template/images/banner3.jpg" alt="our best service">
-</div>
-<div class="cols-3">
-    <h1 class="cols">Camelway Machinery, Manufacturing <span>Concrete & Aggregate Machines</span> Since 1983</h1>
-    <p class="cols">Relying on 30 years of manufacturing experience,  Camelway Machinery has become a complete provider of building equipments &amp; solutions, our services cover the areas of concrete, aggregate, etc.  the main products include conrete mixer, concrete batching plant, stone crusher and crushing plant.</p>
-    <div class="product-list cols">
-        <ul>
-                <li><a href="#"><img src="/template/images/batching.jpg" alt="concrete batching plant" title="concrete batching plant"></a><h2>Concrete Batching Plant</h2></li>
-                <li><a href="#"><img src="/template/images/mobile.jpg" alt="mobile stone crusher" title="mobile stone crusher"></a><h2>Mobile Crushing Plant</h2></li>
-                <li><a href="#"><img src="/template/images/mixing.jpg" alt="Continuous Mixing Plant" title="Continuous Mixing Plant"></a><h2>Continuous Mixing Plant</h2></li>
-                <li><a href="#"><img src="/template/images/crushing.jpg" alt="stone crushing plant" title="stone crushing plant"></a><h2>stone crushing plant</h2></li>
-        </ul>
-    </div>
-</div>
+    <ul class="products">
+        <li>
+            <a href="/batching-plant/"><img src="/uploads/batching-plant.jpg" alt="concrete batching plant" title="for ready mixed concrete, precast, etc."></a>
+            <dl>
+                <dt><a href="/batching-plant/">Concrete Batching Plant</a></dt>
+<?php
+rand_post(8,"batching plant");
+while(have_posts()){
+              echo "<dd><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
+}
+?>
+            </dl>
+        </li>
+        <li>
+            <a href="/mixing-plant/"><img src="/uploads/rcc-plant.jpg" alt="Continuous Mixing Plant" title="for Roller Compacted Concrete, Stabilized Soil Application in Paving and dam construction"></a>
+            <dl>
+                <dt><a href="/mixing-plant/">Continuous Mixing Plant</a></dt>
+<?php
+rand_post(8,"mixing plant");
+while(have_posts()){
+              echo "<dd><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
+}
+?>
+            </dl>
+        </li>
 
-<div class="footer">
-    <div class="text">Address: No. 466, Zheng Shang Road, Zhengzhou city China.  Email: info@camelway.com   Whatsapp:008618838109566</div>
-    <div class="text"> Copyright &copy;Camelway Machinery</div>
-</div>
-<script language="javascript" src="https://pkt.zoosnet.net/JS/LsJS.aspx?siteid=PKT10517310&lng=en&float=1"></script>
-</body>
-</html>
+        <li>
+            <a href="/mobile-crushing-plant/"><img src="/uploads/mobile-crusher.jpg" alt="Mobile Crushing Plant" title="Mobile Stone Crushing Plant, for Aggregate or Manufacured Sand"></a>
+            <dl>
+                <dt><a href="/mobile-crushing-plant/">Mobile Crushing Plant</a></dt>
+<?php
+rand_post(8,"mobile crushing plant");
+while(have_posts()){
+              echo "<dd><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
+}
+?>
+            </dl>
+        </li>
+
+        <li>
+            <a href="/crushing-plant/"><img src="/uploads/crushing-plant.jpg" alt="Stone Crushing Plant" title="Stone Crusher and Stone Crushing Plant for Aggregate, Sand and Mining."></a>
+            <dl>
+                <dt><a href="/crushing-plant/">Stone Crushing Plant</a></dt>
+<?php
+rand_post(8,"crushing plant");
+while(have_posts()){
+              echo "<dd><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
+}
+?>
+            </dl>
+        </li>
+    </ul>
+</main>
+<?php
+get_footer();
+?>
