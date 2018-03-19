@@ -96,7 +96,7 @@ $iscategory=false;
 function save_post_html(){
     //全局变量
     global $posts;
-    global $posts;
+    global $post;
     global $callbackfunctions;
     global $isamp;
     global $issingle;
@@ -106,7 +106,6 @@ function save_post_html(){
     global $category;
     global $linkname;
     global $postid;
-
     $category_path=get_link_name($category);
 
     //引入模板functions
@@ -342,33 +341,42 @@ function get_the_post_time(){
 function the_post_time(){
     echo get_the_post_time();
 }
-function the_post_id(){
-    global $post;
-    echo $post['id'];
-    return $post['id'];
-}
 function get_the_post_id(){
     global $post;
     return $post['id'];
 }
-function the_post_title(){
-    global $post;
-    echo $post['title'];
-    return $post['title'];
+function the_post_id(){
+    echo get_the_post_id();
 }
 function get_the_post_title(){
     global $post;
     return $post['title'];
+}
+function the_post_title(){
+    echo get_the_post_title();
 }
 function get_the_post_category(){
     global $post;
     return $post['category'];
 }
 function the_post_category(){
-    global $post;
-    echo $post['category'];
-    return $post['category'];
+    echo get_the_post_category();
 }
+function next_post_link(){
+    global $mysql,$category;
+    $tmp = $mysql->getOne("select * from posts where category = \"$category\" order by id asc limit 0,1");
+    $link ="/".get_link_name($tmp['category']).'/'.str_replace("%post_id%",$tmp['id'],str_replace("%post_name%",$tmp['linkname'],permanlink));
+    $link=str_replace("//","/",$link);
+    echo "<span>Next: <a href=\"$link\">".$tmp['title']."</a></span>";
+}
+function previous_post_link(){
+    global $mysql,$category;
+    $tmp = $mysql->getOne("select * from posts where category = \"$category\" order by id desc limit 0,1");
+    $link ="/".get_link_name($tmp['category']).'/'.str_replace("%post_id%",$tmp['id'],str_replace("%post_name%",$tmp['linkname'],permanlink));
+    $link=str_replace("//","/",$link);
+    echo "<span>Previous: <a href=\"$link\">".$tmp['title']."</a></span>";
+}
+
 function the_paging_nav(){
     global $page;
     global $category;
