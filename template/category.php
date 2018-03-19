@@ -4,6 +4,7 @@
         <h1><?php the_category();?></h1>
     </header>
 <?php
+init_post();
 while(have_posts()){
 ?>
         <article class="category-post-thumb-tiling">
@@ -14,11 +15,14 @@ while(have_posts()){
                 <img src="<?php the_rand_image(get_the_post_title())?>"  alt="<?php the_post_title();?>">
                 <figcaption><?php the_post_title();?></figcaption>
             </figure>
-            <p><?php the_post_title();?></p>
+            <p><?php the_post_description();?></p>
         </article>
 <?php
 }
 ?>
+    <nav class="paging">
+            <?php the_paging_nav();?>
+    </nav>
 </div>
 <?php
 get_sidebar();

@@ -1,5 +1,6 @@
 RewriteEngine On
 RewriteBase /
+RewriteCond %{REQUEST_FILENAME}.gz -f
 RewriteRule ^(.*\.(html|htm))$ /$1.gz [L]
 
 <FilesMatch "\.(html|txt)\.gz$">

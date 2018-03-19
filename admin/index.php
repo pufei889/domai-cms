@@ -47,7 +47,7 @@ html,body {width:100%;height:100%}
 <div class="left">
     <ul>
         <li><a href="./">内容管理</a></li>
-        <li><a href="./add.php">添加管理</a></li>
+        <li><a href="./add.php">添加内容</a></li>
         <li><a href="./fix.php">数据修复</a></li>
     </ul>
 </div>

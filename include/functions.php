@@ -143,7 +143,6 @@ function save_post_html(){
     //category directory init
     if(!file_exists(ABSPATH.$category_path)){
         mkdir(ABSPATH."/".$category_path,0777);
-        mkdir(ABSPATH."/".$category_path."/amp/",0777);
         //html category
         if(file_exists(ABSPATH."template/".$category_path."-category.php")){
             $templatecontent=file_get_contents(ABSPATH."include/category.php").file_get_contents(ABSPATH."template/".$category_path."-category.php");
@@ -154,6 +153,11 @@ function save_post_html(){
         }else{
             return false;
         }
+
+    }
+    //AMP Category INIT
+    if(!file_exists(ABSPATH."/".$category_path."/amp/")){
+        mkdir(ABSPATH."/".$category_path."/amp/",0777);
         //amp category
         if(file_exists(ABSPATH."template/amp/".$category_path."-category.php")){
             $templatecontent=file_get_contents(ABSPATH."include/amp-category.php").file_get_contents(ABSPATH."template/amp/".$category_path."-category.php");
@@ -219,6 +223,16 @@ function is_single(){
 function is_category(){
     global $iscategory;
     if($iscategory==true){
+        return true;
+    }else{
+        return false;
+    }
+}
+//分类是否为404页面
+function is_404(){
+    global $category,$mysql;
+    $tmp = $mysql->getOne("select id from posts where category=\"$category\"");
+    if(empty($tmp)){
         return true;
     }else{
         return false;
@@ -298,7 +312,7 @@ function get_the_post_description($len=500){
     global $post;
     return mb_substr($post['description'],0,$len);
 }
-function the_post_description($len){
+function the_post_description($len=500){
     echo get_the_post_description($len);
 }
 
@@ -411,6 +425,11 @@ function rand_post($num=null,$category=null){
     }
     $posts=$mysql->getRows("select * from posts where $where order by rand() limit 0,$num");
 }
+//显示当前栏目下的文章
+function init_post(){
+    global $posts,$page,$category,$numperpage,$mysql;
+    $posts = $mysql->getRows("select * from posts where category = \"$category\" order by id desc limit ".($page-1)*$numperpage.", $numperpage");    
+}
 /*
 function have_related_post(){
     global $relatedposts;
@@ -460,7 +479,7 @@ function get_the_amp_related_link(){
 function the_amp_related_link(){
     echo get_the_amp_related_link();
 }
-*/
+ */
 //以下为获取随机文章的函数，所有页面通用
 function get_the_rand_image($seed=NULL,$dir="/uploads/batching/"){
     $imagedir=ABSPATH.$dir;
@@ -533,7 +552,7 @@ function the_amp_html(){
     }
 }
 function the_amp_canonical(){
- if(is_home()){
+    if(is_home()){
         echo "<link rel=\"canonical\" href=\"/\">\r\n";
     }else if(is_category()){
         global $category_path;

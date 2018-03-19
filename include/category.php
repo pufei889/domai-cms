@@ -10,10 +10,7 @@ if($page<1){
 $category = substr($_SERVER["REQUEST_URI"],1); 
 $category = substr($category,0,strpos($category,"/"));
 $category = str_replace("-"," ",$category);
-$offset=($page-1)*pagecount;
-$posts = $mysql->getRows("select * from posts where category = \"$category\" order by id desc limit $offset, $numperpage");
-$post=array();
-if(empty($posts)){
+if(is_404()){
     header("HTTP/1.1 404 Not Found");
     die;
 }
