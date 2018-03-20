@@ -1,7 +1,6 @@
 *.xml
 lock
 uploads/
-template/
 chat.html
 chat.html.gz
 
