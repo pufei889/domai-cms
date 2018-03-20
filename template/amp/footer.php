@@ -17,7 +17,7 @@ while(have_posts()){
 <?php
 rand_post(2,"case");
 while(have_posts()){
-   echo "<dd><a href=\"".get_the_post_link()."\"><img src=\"".get_the_rand_image(get_the_post_link(),"/uploads/case/")."\" alt=\"".get_the_post_title()."\"></a><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
+   echo "<dd><a href=\"".get_the_post_link()."\"><amp-img src=\"".get_the_rand_image(get_the_post_link(),"/uploads/case/")."\" alt=\"".get_the_post_title()."\" width=\"170\" height=\"128\"></amp-img></a><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></dd>";
 }
 ?>
         </dl>

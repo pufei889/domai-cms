@@ -31,5 +31,6 @@ while(have_posts()){
 </ul>
 <p class="copy">Copyright &copy;2018 Camelway Machinery</p>
 </footer>
+<script language="javascript" src="https://pkt.zoosnet.net/JS/LsJS.aspx?siteid=PKT10517310&lng=en&float=1"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 function list_add_thumb_batch($content){
     preg_match_all("/(<h2>([^>]*)<\/h2>)[\s\r\n]*(<p>[^>]*<\/p>)/",$content,$match);
-    if(empty($match[1]) || strpos($content,"<img")!==false || strpos($content,"<h3>")!==false || strpos($content,"<strong>")!==false || strpos($content,"<a href")!==false || strpos($content,"<span>")!==false){
+    if(empty($match[1]) || strpos($content,"<img")!==false || strpos($content,"<h3>")!==false || strpos($content,"<strong>")!==false || strpos($content,"<a href")!==false || strpos($content,"<span>")!==false || strpos($content,"<amp-")!==false){
         return $content;
     }
     $content = "";
@@ -20,7 +20,7 @@ function list_add_thumb_batch($content){
 }
 function list_add_thumb_crusher($content){
     preg_match_all("/(<h2>([^>]*)<\/h2>)[\s\r\n]*(<p>[^>]*<\/p>)/",$content,$match);
-    if(empty($match[1]) || strpos($content,"<img")!==false || strpos($content,"<h3>")!==false || strpos($content,"<strong>")!==false || strpos($content,"<a href")!==false || strpos($content,"<span>")!==false){
+    if(empty($match[1]) || strpos($content,"<img")!==false || strpos($content,"<h3>")!==false || strpos($content,"<strong>")!==false || strpos($content,"<a href")!==false || strpos($content,"<span>")!==false || strpos($content,"<amp-")!==false){
         return $content;
     }
     $content = "";
@@ -38,8 +38,8 @@ function list_add_thumb_crusher($content){
     return "<ul>".$content."</ul>";
 }
 
-if(get_the_category()=="news"){
+if(get_the_category()=="news"||get_the_category()=="News"){
     add_filter("the_content","list_add_thumb_batch");
-}else if(get_the_category()=="case"){
+}else if(get_the_category()=="case"||get_the_category()=="Case"){
     add_filter("the_content","list_add_thumb_crusher");
 }

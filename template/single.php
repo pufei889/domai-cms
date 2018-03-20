@@ -7,12 +7,6 @@
     <?php
         the_content();
     ?>
-    <div class="post-nav">
-        <?php
-            next_post_link();
-            previous_post_link();
-        ?>
-    </div>
     </article>
 <?php  comment_form(); ?>
 </div>

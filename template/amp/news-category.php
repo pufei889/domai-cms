@@ -19,7 +19,7 @@ while(have_posts()){
         </nav>
     </div>
 <?php
-    get_sider();
+get_sidebar();
 ?>
 </main>
 <?php

@@ -2,18 +2,36 @@
     <div class="widget">
         <h4>Products</h4>
         <ul>
-            <li><a href="#">HZS25 Concrete batching Plant HZS25 Concrete batching Plant HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
-            <li><a href="#">HZS25 Concrete batching Plant</a></li>
+<?php
+rand_post(5,"batching plant");
+while(have_posts()){
+    echo "<li><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></li>";
+}
+rand_post(5,"mixing plant");
+while(have_posts()){
+    echo "<li><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></li>";
+}
+rand_post(5,"crushing plant");
+while(have_posts()){
+    echo "<li><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></li>";
+}
+rand_post(5,"mobile crushing plant");
+while(have_posts()){
+    echo "<li><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></li>";
+}
+?>
         </ul>
+    </div>
+    <div class="widget">
+    <h4>Related Posts</h4>
+    <ul>
+<?php
+rand_post(5);
+while(have_posts()){
+    echo "<li><a href=\"".get_the_post_link()."\">".get_the_post_title()."</a></li>";
+}
+?>
+    </ul>
     </div>
     <div class="widget">
         <h4>Contact US</h4>
