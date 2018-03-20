@@ -186,8 +186,8 @@ function save_post_html(){
 //把不符合AMP规范的标签替换
 //https://www.ampproject.org/zh_cn/docs/fundamentals/spec
 function amp_filter($content){
-    $patterns=array("/<img([^>]*)>/i","/<video([^>]*)>/i","/<\/video>/i","/<audio([^>]*)>/i","/<\/audio>/i","/<iframe([^>]*)>/i","/<\/iframe>/i");
-    $replacements=array('<amp-img${1} layout="responsive"></amp-img>','<amp-video${1}>',"</amp-video>",'<amp-audio${1}>',"</amp-audio>",'<amp-iframe${1}>',"</amp-iframe>");
+    $patterns=array("/<img([^>]*?)(\/?)>/i","/<video([^>]*)>/i","/<\/video>/i","/<audio([^>]*)>/i","/<\/audio>/i","/<iframe([^>]*)>/i","/<\/iframe>/i","/\sstyle=[^\s>]*/i");
+    $replacements=array('<amp-img${1} layout="responsive"></amp-img>','<amp-video${1}>',"</amp-video>",'<amp-audio${1}>',"</amp-audio>",'<amp-iframe${1}>',"</amp-iframe>","");
     $content = preg_replace($patterns,$replacements,$content);
     return $content; 
 }
