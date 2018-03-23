@@ -100,6 +100,7 @@ function save_post_html(){
     global $callbackfunctions;
     global $isamp;
     global $issingle;
+    global $mysql;
     //文章变量，从发布接口获取
     global $title;
     global $content;
@@ -108,13 +109,10 @@ function save_post_html(){
     global $postid;
     $category_path=get_link_name($category);
 
-    //引入模板functions
-    if(file_exists(ABSPATH."template/functions.php")){
-        require_once(ABSPATH."template/functions.php");
-    }
     //HTML Single
     $issingle=true;
     ob_start();
+    template_function_init();
     if(file_exists(ABSPATH."template/".$category_path."-single.php")){
         require(ABSPATH."template/".$category_path."-single.php");
     }else if(file_exists(ABSPATH."template/single.php")){
@@ -129,6 +127,7 @@ function save_post_html(){
     ob_start();
     $content=amp_filter($content);
     $isamp=true;
+    template_function_init();
     if(file_exists(ABSPATH."template/amp/".$category_path."-single.php")){
         require(ABSPATH."template/amp/".$category_path."-single.php");
     }else if(file_exists(ABSPATH."template/amp/single.php")){
@@ -182,14 +181,52 @@ function save_post_html(){
     }
     return false;
 }
-
-//把不符合AMP规范的标签替换
+//主题functions init
+function template_function_init(){
+    //引入模板functions
+    if(file_exists(ABSPATH."template/functions.php")){
+        require_once(ABSPATH."template/functions.php");
+    }
+}
+//把不符合AMP规范的代码替换
 //https://www.ampproject.org/zh_cn/docs/fundamentals/spec
-function amp_filter($content){
-    $patterns=array("/<img([^>]*?)(\/?)>/i","/<video([^>]*)>/i","/<\/video>/i","/<audio([^>]*)>/i","/<\/audio>/i","/<iframe([^>]*)>/i","/<\/iframe>/i","/\sstyle=[^\s>]*/i");
-    $replacements=array('<amp-img${1} layout="responsive"></amp-img>','<amp-video${1}>',"</amp-video>",'<amp-audio${1}>',"</amp-audio>",'<amp-iframe${1}>',"</amp-iframe>","");
+//需要替换标签
+//<style>,<script>,<frame>,<frameset>,<object>,<param>,<applet>,<embed> <!-- -->
+//需要更改标签
+//<img> -> <amp-img>
+//<video> -> <amp-video>
+//<audio> -> <amp-audio>
+//<iframe> -> <amp-iframe>
+function amp_html_tags_filter($content){
+    $content = preg_replace("/<style[^>]*>[\s\S]*<\/style>/iU","",$content);
+    $content = preg_replace("/<script[^>]*>[\s\S]*<\/script>/iU","",$content);
+    $content = preg_replace("/<frame[^>]*>[\s\S]*<\/frame>/iU","",$content);
+    $content = preg_replace("/<frameset[^>]*>[\s\S]*<\/frameset>/iU","",$content);
+    $content = preg_replace("/<object[^>]*>[\s\S]<\/object>/iU","",$content);
+    $content = preg_replace("/<param[^>]*>[\s\S]<\/param>/iU","",$content);
+    $content = preg_replace("/<applet[^>]*>[\s\S]<\/applet>/iU","",$content);
+    $content = preg_replace("/<!--[\s\S]*-->/iU","",$content);
+    $patterns=array("/<img([^>]*?)(?=\/>)\/?>/i","/<video([^>]*)>/i","/<\/video>/i","/<audio([^>]*)>/i","/<\/audio>/i","/<iframe([^>]*)>/i","/<\/iframe>/i");
+    $replacements=array('<amp-img${1} layout="responsive"></amp-img>','<amp-video${1}>',"</amp-video>",'<amp-audio${1}>',"</amp-audio>",'<amp-iframe${1}>',"</amp-iframe>");
     $content = preg_replace($patterns,$replacements,$content);
-    return $content; 
+    return $content;
+}
+//属需要去掉的标签属性
+//onXXXX: onclick onmouseover onmouseenter...
+//style
+//需要增加标签标签属性
+//<img> layout="responsive" width height
+function amp_html_attr_filter($content){
+    //preg_match("/<([^<>]*)\s*style=[\"\'].*?[\"\'](?=\s|\/|>)/i",$content,$m);
+    $content = preg_replace("/<([^<>]*)\s*style=[\"\'].*?[\"\'](?=\s|\/|>)/i","<\${1}",$content);
+    $content = preg_replace("/<a(.*)href=[\"\']javascript:.*?[\"\'](?=\s|\/|>)/i","<a",$content);
+    $content = preg_replace("/<(.*)on(?:click|load|abort|blur|change|dbclick|error|focus|keydown|keypress|keyup|mousedown|mousemove|mouseout|mouseover|mouseup|reset|resize|select|submit|unload)=[\"\'].*?[\"\'](?=\s|\/|>)/i","<\${1}",$content);
+    return $content;
+}
+function amp_filter($content){
+    $content = amp_html_tags_filter($content);
+    $content = amp_html_attr_filter($content);
+    return $content;
 }
 //判断是否为amp页面
 function is_amp(){
@@ -550,22 +587,26 @@ function comment_form(){
     }
 }
 function the_amp_html(){
+    global $linkname,$postid,$category;
+    $category_path=get_link_name($category);
     if(is_home()){
         echo "<link rel=\"amphtml\" href=\"/?amp\">\r\n";
     }else if(is_category()){
         global $category_path;
         echo "<link rel=\"amphtml\" href=\"/".$category_path."/amp/\">\r\n";
     }else if(is_single()){
-        echo "<link rel=\"amphtml\" href=\"".get_the_amp_post_link()."\">\r\n";
+        echo "<link rel=\"amphtml\" href=\"/".$category_path."/amp/".str_replace("%post_id%",$postid,str_replace("%post_name%",$linkname,permanlink))."\">\r\n";
     }
 }
 function the_amp_canonical(){
+    global $linkname,$postid,$category;
+    $category_path=get_link_name($category);
     if(is_home()){
         echo "<link rel=\"canonical\" href=\"/\">\r\n";
     }else if(is_category()){
         global $category_path;
         echo "<link rel=\"canonical\" href=\"/".$category_path."\">\r\n";
     }else if(is_single()){
-        echo "<link rel=\"canonical\" href=\"".get_the_post_link()."\">\r\n";
+        echo "<link rel=\"canonical\" href=\"/".$category_path."/".str_replace("%post_id%",$postid,str_replace("%post_name%",$linkname,permanlink))."\">\r\n";
     }
 }

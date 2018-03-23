@@ -12,7 +12,7 @@ function list_add_thumb_batch($content){
         if(is_amp()){
             $img = "<amp-img src=\"".get_the_rand_image($no_tag_title)."\" alt=\"$no_tag_title\" class=\"thumb\" layout=\"responsive\" width=\"200\" height=\"150\"></amp-img>\r\n";
         }else{
-            $img = "<img src=\"".get_the_rand_image($no_tag_title)."\" alt=\"$no_tag_title\" class=\"thumb\">\r\n";
+            $img = "<img src=\"".get_the_rand_image($no_tag_title)."\" alt=\"$no_tag_title\" class=\"thumb\" width=\"200\" height=\"150\">\r\n";
         }
         $content .= "<li class=\"content-list\">".$img.$title.$desc."</li>";
     }
@@ -31,7 +31,7 @@ function list_add_thumb_crusher($content){
         if(is_amp()){
             $img = "<amp-img src=\"".get_the_rand_image($no_tag_title,"/uploads/crusher/")."\" alt=\"$no_tag_title\" class=\"thumb\" layout=\"responsive\" width=\"200\" height=\"150\"></amp-img>\r\n";
         }else{
-            $img = "<img src=\"".get_the_rand_image($no_tag_title,"/uploads/crusher/")."\" alt=\"$no_tag_title\" class=\"thumb\">\r\n";
+            $img = "<img src=\"".get_the_rand_image($no_tag_title,"/uploads/crusher/")."\" alt=\"$no_tag_title\" class=\"thumb\" width=\"200\" height=\"150\">\r\n";
         }
         $content .= "<li class=\"content-list\">".$img.$title.$desc."</li>";
     }
