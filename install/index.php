@@ -6,9 +6,9 @@ if(file_exists("./lock")){
 }
 $sqls=str_replace(array("  ","\n","\t"),array(" ",""," "),file_get_contents("./struct.sql"));
 foreach(explode("##",$sqls) as $sql){
-    $mysql->query($sql);
+    $swpdb->query($sql);
 }
-$tmp=$mysql->getOne("select id from stat where 1=1");
+$tmp=$swpdb->get_row("select id from stat where 1=1");
 if(empty($tmp[0])){
     die("安装失败");
 }else{

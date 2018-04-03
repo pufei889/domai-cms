@@ -1,7 +1,6 @@
 <?php
 /*
  *后台管理界面
- */
 require_once("./auth.php");
 $page = isset($_GET["page"])?(int)$_GET['page']:1;
 $numperpage=25;
@@ -26,6 +25,7 @@ if(@$_GET['action']=='del'){
         die;
     }
 }
+ */
 ?>
 <!DOCTYPE HTML>
 <html>

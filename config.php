@@ -1,27 +1,19 @@
 <?php
 /*
- * camelway 网站系统
- * Author Hito 2018.3.2
- * 配置文件
- *
+ * SWPL CMS
+ * Simple Wordpress Like Content Management System
+ * Copyright @Hito(2018 https://www.hitoy.org/
+ * License: Non-commercial Use
+ * Version: 1.0.0
+ * Update: 2018-03-30
  */
 
 //数据库配置地址
-define("dbname","dba");
-define("dbhost","localhost");
-define("dbuser","root");
-define("dbpasswd","");
-
-//后台用户名和密码
-define("user","camelway123");
-define("password","123camelway");
-//网站配置
-define("sitename","Concrete batching Plant, Stone Crushing Plant");
-//列表页调用数量
-define("pagecount",10);
-//html是否压缩: 推荐
-define("compress",true);
-//固定链接格式, 支持%post_name%.html, %post_id%.html
-define("permanlink","%post_name%.html");
-//发布密码，不要更改
-define("submitpasswd","yht123hito");
+define("DB_NAME","dba");
+define("DB_HOST","localhost");
+define("DB_USER","root");
+define("DB_PASSWORD","");
+//是否开启debug模式
+define('DEBUG', true);
+if(!defined('ABSPATH'))
+	define('ABSPATH', dirname(__FILE__).'/');

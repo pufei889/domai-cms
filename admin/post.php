@@ -3,21 +3,19 @@
  * 采集发布接口
  * 2018年3月2日 Hito
  */
-require_once("./init.php");
+require_once("../init.php");
 if(empty($_POST)){
     header("HTTP/1.1 404 Not Found");
     die;
 }
-header("Content-Type:application/json");
-if(empty($_GET['secret']) || $_GET['secret'] !=submitpasswd){
-    echo '{"url":"https://www.baidu.com/","result":"Publish Failure, Bad Password!"}';
-    die;
-}
-$title = @space_replace($_POST['post_title']);
-$content = @space_replace($_POST['post_content']);
-$category = @space_replace($_POST['post_category']);
-//获取linkname
-$linkname = get_link_name($title);
+$_POST=array_map($_POST,'trim');
+$post_title = $_POST['post_title'];
+$post_content = $_POST['post_content'];
+$post_excerpt = $_POST['post_excerpt'];
+$post_category = $_POST['post_category'];
+$post_category = $_POST['post_category'];
+$post_date = $_POST['post_date'];
+$post_thumbnail = $_POST['post_thumbnail'];
 
 if(empty($title) || empty($content)){
     echo '{"url":"https://www.baidu.com/","result":"Publish Failure,Title or Content Empty!"}';
