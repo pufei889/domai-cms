@@ -1,4 +1,4 @@
-##Simple Collector CMS
+##Domai内容管理系统
 
 一个支持采集接口的简单内容管理系统
 支持自定义模板

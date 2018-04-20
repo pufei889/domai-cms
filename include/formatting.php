@@ -232,16 +232,7 @@ function strip_specified_tags($string,$tags='style,script,frame,frameset,object,
  * 去除所有标签属性
  */
 function strip_attrs($string,$remove='style,onclick,onload,onabort,onblur,onchange,ondbclick,onerror,onfocus,onkeydown,onkeypress,onkeyup,onmousedown,onmousemove,onmouseout,onmouseover,onmouseup,onreset,onresize,onselect,onsubmit,onunload'){
-    preg_match_all("/(.*)(?=\s*)*/i",$string,$m);
-    print_r($m);
+     require_once("./simple_html_dom.php");
+     $dom = str_get_html($string);
+     var_dump($dom);
 }
-
-
-function strip_attr_reserved($string,$exclude=array("href","alt","title","class","id","width","height")){
-
-}
-header("content-type:text/html;charset=utf-8");
-//echo remove_accents("ǚ Бетоносмесительная установка  Trạm trộn bê tông");
-$alt = "Charlie 's Angels \"test\" cool! ";
-$str = '<a href="test.html?val=1" title="' . $alt . '"> afaf</a> <script type="fdsa">alert(1);</script><img src="fdsaf" alt=""> <input class = " fds "  autofous>';
-echo strip_attrs($str);

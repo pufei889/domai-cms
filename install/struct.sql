@@ -21,15 +21,17 @@ create table categories(
 create table posts(
     ID int unsigned primary key auto_increment,
     post_title varchar(200) not null,
-    post_excerpt varchar(500) not null,
-    post_name varchar(255) not null,
-    post_category char(50) not null,
-    post_author int unsigned not null,
+    post_excerpt varchar(500),
+    post_name varchar(255),
     post_date datetime DEFAULT now(),
+    post_category int(4) unsigned not null,
+    post_author int unsigned not null,
+    post_type char(10) DEFAULT 'post',
     index(post_title),
     index(post_name),
     index(post_category),
-    index(post_author)
+    index(post_author),
+    index(post_type)
 )engine=innodb, charset=utf8;
 
 ##系统模型
@@ -81,3 +83,4 @@ create table options(
 
 # poststat: 全部文章统计，格式 array("page"=>10,"post"=>array("total"=>100,"category1"=>99,"category2"=>1))
 # activetemplate: 激活的主题名称
+# filetype: 生成的页面后缀

@@ -2,7 +2,7 @@
 /*
  * post对象
  */
-final class SWP_Post{
+final class Domai_Post{
     /*
      * 存放在posts表里的基础post信息
      */
@@ -17,12 +17,12 @@ final class SWP_Post{
    
 
     public static function get_instance($post_id){
-        global $swpdb;
+        global $domai_db;
         $post_id=(int) $post_id;
         if(!$post_id) return false;
-        $_post = $swpdb->get_row("select posts.*, users.username as post_author from posts left join users on posts.post_author = users.id");
+        $_post = $domai_db->get_row("select posts.*, users.username as post_author from posts left join users on posts.post_author = users.id where posts.ID = $post_id");
         if(!empty($_post)){
-            return new SWP_Post($_post);
+            return new Domai_Post($_post);
         }
     }
 
@@ -38,10 +38,6 @@ final class SWP_Post{
         }else{
             return NULL;
         }
-    }
-
-    public function add_content($text){
-        $this->post_content=$text;
     }
 
 }

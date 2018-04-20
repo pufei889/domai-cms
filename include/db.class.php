@@ -28,6 +28,7 @@ class SWPDB {
 
 	//执行不需要结果的sql:insert update等等
 	public function query($queryString){
+        if($queryString==null) return;
 		$result = mysqli_query($this->connect,$queryString);
         if(preg_match('/^\s*(insert|replace)\s/i',$queryString)){
             $this->insert_id=mysqli_insert_id($this->connect);

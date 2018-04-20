@@ -4,12 +4,12 @@ require_once("../init.php");
 if(file_exists("./lock")){
     die("系统已经安装");
 }
-$sqls=str_replace(array("  ","\n","\t"),array(" ",""," "),file_get_contents("./struct.sql"));
-foreach(explode("##",$sqls) as $sql){
+$sqls=preg_split("/\#\#.+/i",file_get_contents("./struct.sql"));
+foreach($sqls as $sql){
     $swpdb->query($sql);
 }
-$tmp=$swpdb->get_row("select id from stat where 1=1");
-if(empty($tmp[0])){
+$tmp=$swpdb->get_results("show tables");
+if(count($tmp)==6){
     die("安装失败");
 }else{
     echo "安装成功";

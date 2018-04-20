@@ -1,9 +1,8 @@
 <?php
 /*
- * SWPL CMS
+ * Domai CMS
+ * Copyright @2018 Hito
  * Core Functions
- * 2018/4/12
- * Copyright @Hito
  */
 
 //检查一个数据是否是序列化数据
@@ -89,4 +88,29 @@ function get_option($option_name){
     }else{
         return $option_value;
     }
+}
+
+function is_home(){
+    global $domai_query;
+    return $domai_query->is_home();
+}
+function is_search(){
+    global $domai_query;
+    return $domai_query->is_search($search);
+}
+function is_single($post=NULL){
+    global $domai_query;
+    return $domai_query->is_single($post);
+}
+function is_page($page=NULL){
+    global $domai_query;
+    return $domai_query->is_page($category);
+}
+function is_category($category=NULL){
+    global $domai_query;
+    return $domai_query->is_category($category);
+}
+function is_tag($tag=NULL){
+    global $domai_query;
+    return $domai_query->is_tag($tag);
 }
