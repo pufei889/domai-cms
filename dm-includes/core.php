@@ -1,11 +1,12 @@
 <?php
 /*
  * Domai CMS
+ * 哆麦 内容管理系统
  * Copyright @2018 Hito
  * Core Functions
  */
 
-//检查一个数据是否是序列化数据
+/**检查一个数据是否是序列化数据 */
 function is_serialized( $data, $strict = true ) {
     // if it isn't a string, it isn't serialized.
     if ( ! is_string( $data ) ) {
@@ -61,24 +62,32 @@ function is_serialized( $data, $strict = true ) {
     return false;
 }
 
+/*
+ * 结束程序执行并返回制定的HTML错误信息 
+ */
+function dm_die($message="",$title="",$args=array()){
+
+
+}
+
 //下面三个是配置管理函数
 function add_option($option_name,$option_value){
-    global $swpdb;
+    global $dm_db;
     if(is_array($option_value)||is_object($option_value)){
         $option_value=serialize($option_value);
     }
     if(get_option($option_name)==null){
-        $swpdb->query("insert into options(option_name,option_value) values('".$option_name."','".$option_value."');");
+        $dm_db->query("insert into dm_options(option_name,option_value) values('".$option_name."','".$option_value."');");
     }else{
         update_option($option_name,$option_value);
     }
 }
 function update_option($option_name,$option_value){
-    global $swpdb;
+    global $dm_db;
     if(is_array($option_value)||is_object($option_value)){
         $option_value=serialize($option_value);
     }
-    $swpdb->query("update options set option_value='".$option_value."' where option_name = '".$option_name."'");
+    $dm_db->query("update dm_options set option_value='".$option_value."' where option_name = '".$option_name."'");
 }
 function get_option($option_name){
     global $swpdb;
@@ -91,26 +100,26 @@ function get_option($option_name){
 }
 
 function is_home(){
-    global $domai_query;
-    return $domai_query->is_home();
+    global $dm_query;
+    return $dm_query->is_home();
 }
 function is_search(){
-    global $domai_query;
-    return $domai_query->is_search($search);
+    global $dm_query;
+    return $dm_query->is_search($search);
 }
 function is_single($post=NULL){
-    global $domai_query;
-    return $domai_query->is_single($post);
+    global $dm_query;
+    return $dm_query->is_single($post);
 }
 function is_page($page=NULL){
-    global $domai_query;
-    return $domai_query->is_page($category);
+    global $dm_query;
+    return $dm_query->is_page($category);
 }
 function is_category($category=NULL){
-    global $domai_query;
-    return $domai_query->is_category($category);
+    global $dm_query;
+    return $dm_query->is_category($category);
 }
 function is_tag($tag=NULL){
-    global $domai_query;
-    return $domai_query->is_tag($tag);
+    global $dm_query;
+    return $dm_query->is_tag($tag);
 }

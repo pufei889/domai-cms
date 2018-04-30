@@ -1,15 +1,25 @@
 <?php
 /*
- * 字符串处理函数
+ * Domai CMS
+ * 哆麦 内容管理系统
+ * Copyright @2018 Hito
+ *
+ * 此文件用来存放所有的系统级别的字符串处理函数
  */
 
 /*
- * 把非ASIIC字符转化为ASIIC
+ * 将所有和ASCII有对应关系的字符转换为ASCII字符
+ * 参考了wordpress的字符对应表
+ * 包括:
+ * 各类有对应关系的读音
+ * 俄语字符
+ *
+ * 系统还不完善，正在参加中
+ * 参考资料:
+ * https://codex.wordpress.org/Function_Reference/remove_accents
+ * http://www.russianlessons.net/lessons/lesson1_alphabet.php
  */
-function remove_accents( $string ) {
-    if ( !preg_match('/[\x80-\xff]/', $string) )
-        return $string;
-
+function to_ascii($string){
     $chars = array(
         // Decompositions for Latin-1 Supplement
         'ª' => 'a', 'º' => 'o',
@@ -184,34 +194,83 @@ function remove_accents( $string ) {
         'Ǚ' => 'U', 'ǚ' => 'u',
         // grave accent
         'Ǜ' => 'U', 'ǜ' => 'u',
+        // russia char
+        'а' => 'A', 'а' => 'a',
+        'Б' => 'B', 'б' => 'b',
+        'В' => 'V', 'в' => 'v',
+        'Г' => 'G', 'г' => 'g',
+        'Д' => 'D', 'д' => 'd',
+        'Е' => 'YE', 'е' => 'ye',
+        'Ё' => 'YO', 'ё' => 'yo',
+        'Ж' => 'Zh', 'ж' => 'zh',
+        'З' => 'Z', 'з' => 'z',
+        'И' => 'EE', 'и' => 'ee',
+        'Й' => 'Y', 'й' => 'y',
+        'К' => 'K', 'к' => 'k',
+        'Л' => 'L', 'л' => 'l',
+        'М' => 'M', 'м' => 'm',
+        'Н' => 'H', 'н' => 'h',
+        //注意:这两个分重度和轻度，下面是重读转换
+        'О' => 'O', 'о' => 'o',
+        'П' => 'P', 'п' => 'p',
+        'Р' => 'R', 'р' => 'r',
+        'С' => 'S', 'с' => 's',
+        'Т' => 'T', 'т' => 't',
+        'У' => 'U', 'у' => 'u',
+        'Ф' => 'F', 'ф' => 'f',
+        //注意:这两个由两种意思
+        'Х' => 'H', 'х' => 'h',
+        'Ц' => 'TS', 'ц' => 'ts',
+        'Ч' => 'CH', 'ч' => 'ch',
+        //以下是添加了重读和轻读的几个词，由双字符组成
+        'ЪШ' => 'SH', 'Ъш' => 'sh',
+        'ъШ' => 'SH', 'ъш' => 'sh',
+        'ЬЩ' => 'SH', 'Ьщ' => 'sh',
+        'ьЩ' => 'SH', 'ьщ' => 'sh',
+        //完毕
+        //重度       轻读
+        'Ш' => 'SH', 'ш' => 'sh',
+        //重度       轻读
+        'Щ' => 'SH', 'щ' => 'sh',
+        'Ы' => 'I', 'ы' => 'i',
+        'Э' => 'E', 'э' => 'e',
+        'Ю' => 'YU', 'ю' => 'yu',
+        'Я' => 'YA', 'я' => 'ya',
+        //4个重度和轻读字符，无实际意义
+        'Ъ' => '', 'ъ' => '',
+        'Ь' => '', 'ь'=>'',
     );
     $string = strtr($string, $chars);
     return $string;
 }
 
 /*
- * 去除单个标签的后闭合标签
+ * 移除多余的空格
+ * 把多个空格替换成一个
  */
-function strip_single_tag_slash($string){
+function remove_extra_space($string){
+    return preg_replace('/\s{2,}/i','',$string);
+}
+
+/*
+ * 移除\t
+ * 把\t替换成空格
+ */
+function remove_tab($string){
+    return preg_replace('/\t+/i',' ',$string);
+}
+
+/*
+ * 移除单个HTML标签的斜杠
+ */
+function remove_single_tag_slash($string){
     return preg_replace("/<([^>]+)\/>/i","<\${1}>",$string);
 }
 
 /*
- * 去除所有HTML标签
+ * 移除指定HTML标签
  */
-function strip_all_tags($string,$remove_break=false){
-    $string = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
-    $string = strip_tags($string);
-
-    if ( $remove_breaks )
-        $string = preg_replace('/[\r\n\t ]+/', ' ', $string);
-    return trim( $string );
-}
-
-/*
- * 去除指定的HTML标签
- */
-function strip_specified_tags($string,$tags='style,script,frame,frameset,object,param,applet',$remove_comments=true,$remove_breaks=false){
+function remove_tags($string,$tags='style,script,frame,frameset,object,param,applet',$remove_comments=true,$remove_breaks=false){
     $tagsarr=explode(",",$tags);
     foreach($tagsarr as $tag){
         $reg_double = "<\s*".trim($tag)."[^>]*>[\s\S]*<\/".trim($tag).">";
@@ -229,10 +288,36 @@ function strip_specified_tags($string,$tags='style,script,frame,frameset,object,
 }
 
 /*
- * 去除所有标签属性
+ * 移除HTML标签的指定属性
+ * 注意: 由于HTML属性的可能出现各种不规范的写法
+ *       这里最容易出现各种bug，需要进一步进行测试
  */
-function strip_attrs($string,$remove='style,onclick,onload,onabort,onblur,onchange,ondbclick,onerror,onfocus,onkeydown,onkeypress,onkeyup,onmousedown,onmousemove,onmouseout,onmouseover,onmouseup,onreset,onresize,onselect,onsubmit,onunload'){
-     require_once("./simple_html_dom.php");
-     $dom = str_get_html($string);
-     var_dump($dom);
+function remove_attrs($string,$remove='style,onclick,onload,onabort,onblur,onchange,ondbclick,onerror,onfocus,onkeydown,onkeypress,onkeyup,onmousedown,onmousemove,onmouseout,onmouseover,onmouseup,onreset,onresize,onselect,onsubmit,onunload'){
+        
+}
+
+
+
+/*
+ * 下面的函数为使用系统其他函数的
+ * 符合函数
+ */
+
+/*
+ * 净化输入的文章标题
+ */
+function sanitize_post_title($title){
+    $title = remove_tab($title);
+    $title = remove_extra_space($title);
+    return $title;
+}
+
+/*
+ * 根据文章标题获取post_name
+ */
+function sanitize_post_name($title){
+    $postname = to_asccii($title);
+    $postname = remove_tab($postname);
+    $postname = remove_extra_space($postname);
+    return $postname;
 }

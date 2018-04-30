@@ -6,7 +6,7 @@
  * 系统模板类，用来渲染模板
  */
 
-class Domai_Template{
+class DM_Template{
 
     /*
      * 激活的模板名称

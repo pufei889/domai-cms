@@ -1,5 +1,5 @@
 ##栏目信息
-create table categories(
+create table ##_categories(
     id int unsigned primary key auto_increment,
     parent int unsigned, #父栏目ID
     title varchar(200), #栏目标题
@@ -18,7 +18,7 @@ create table categories(
 )engine=innodb, charset=utf8;
 
 ##主要文章表，只存放文章概要，不存放内容
-create table posts(
+create table ##_posts(
     ID int unsigned primary key auto_increment,
     post_title varchar(200) not null,
     post_excerpt varchar(500),
@@ -36,14 +36,14 @@ create table posts(
 )engine=innodb, charset=utf8;
 
 ##系统模型
-create table model_table(
+create table ##_model_table(
     id int unsigned primary key auto_increment,
     model_name varchar(50),
     index(model_name)
 )engine=innodb, charset=utf8;
 
 ##系统模型字段
-create table model_field(
+create table ##_model_field(
     model_id int unsigned not null,
     field_name varchar(50) not null,
     field_identifier varchar(50) not null,
@@ -58,7 +58,7 @@ create table model_field(
 ## 系统模型和系统模型字段共同组成一个完成的系统模型表
 
 ##文章Tag/关键词列表，存放文章或者页面的tag
-create table tags(
+create table ##_tags(
     id int unsigned primary key auto_increment,
     post_id int unsigned not null,
     post_tag varchar(60) not null,
@@ -67,7 +67,7 @@ create table tags(
 )engine=innodb, charset=utf8;
 
 ##用户表
-create table users(
+create table ##_users(
     ID int unsigned primary key auto_increment,
     username varchar(60) not null,
     userpass varchar(255) not null,
@@ -76,7 +76,7 @@ create table users(
 )engine=myisam, charset=utf8;
 
 ##系统配置表，类似wordpress
-create table options(
+create table ##_options(
     option_id int unsigned primary key auto_increment,
     option_name varchar(150) not null,
     option_value text not null,

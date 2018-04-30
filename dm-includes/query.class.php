@@ -16,7 +16,7 @@
  * mobile: 表示用移动版的模板渲染
  */
 
-class Domai_Query{
+class DM_Query{
     /*
      * 查询类型: 单个文章或者多个文章
      * 单个是指只需要调用单个文章的页面，如文章页
@@ -73,17 +73,17 @@ class Domai_Query{
      */
 
     public static function init(){
-        global $domai_query;
-        if($domai_query==NULL){
-            $domai_query = new Domai_Query();
-            $domai_query->run();
+        global $dm_query;
+        if($dm_query==NULL){
+            $dm_query = new self();
+            $dm_query->run();
         }
     }
 
     public function __construct(){
-        global $domai_query;
-        if($domai_query!=NULL){
-            return $domai_query;
+        global $dm_query;
+        if($dm_query!=NULL){
+            return $dm_query;
         }
         if(isset($_GET['mobile'])) $this->is_mobile=true;
         if(isset($_GET['p'])){
@@ -110,13 +110,13 @@ class Domai_Query{
 
     public function run(){
         if($this->is_single || $this->is_page ){
-            $post = Domai_Post::get_instance($this->query);
+            $post = DM_Post::get_instance($this->query);
         }else if($this->is_category){
-            $category= Domai_Category::get_instance($this->query);
+            $category= DM::get_instance($this->query);
         }else if($this->is_tag){
-            $tag= Domai_Tag::get_instance($this->query);
+            $tag= DM_Tag::get_instance($this->query);
         }else if($this->is_search){
-            $search= Domai_Search::get_instance($this->query);
+            $search= DM_Search::get_instance($this->query);
         }
     }
 
@@ -141,9 +141,9 @@ class Domai_Query{
         //当传递的参数为空时，表示判断当前主查询是否为内容页
         if($post==NULL) return $this->is_single;
         //传递有参数时，用数据库进行查询
-        global $domai_db;
+        global $dm_db;
         $postid=(is_int($post))?$post:0;
-        $tmp = $domai_db->get_var("select ID from posts where (ID = $postid or post_title = \"$post\" or post_name = \"$post\") and post_type=\"post\" limit 0,1");
+        $tmp = $dm_db->get_var("select ID from posts where (ID = $postid or post_title = \"$post\" or post_name = \"$post\") and post_type=\"post\" limit 0,1");
         if($tmp) return true;
         return false;
     }
@@ -156,9 +156,9 @@ class Domai_Query{
         //当传递的参数为空时，表示判断当前主查询是否为内容页
         if($post==NULL) return $this->is_page;
         //传递有参数时，用数据库进行查询
-        global $domai_db;
+        global $dm_db;
         $postid=(is_int($post))?$post:0;
-        $tmp = $domai_db->get_var("select ID from posts where (ID = $postid or post_title = \"$post\" or post_name = \"$post\") and post_type=\"page\" limit 0,1");
+        $tmp = $dm_db->get_var("select ID from posts where (ID = $postid or post_title = \"$post\" or post_name = \"$post\") and post_type=\"page\" limit 0,1");
         if($tmp) return true;
         return false;
     }
@@ -171,9 +171,9 @@ class Domai_Query{
         //当传递的参数为空时，表示判断当前主查询是否为栏目页 
         if($category==NULL) return $this->is_category;
         //传递有参数时，用数据库进行查询
-        global $domai_db;
+        global $dm_db;
         $cid=(is_int($category))?$category:0;
-        $tmp=$domai_db->get_var("select id from categories where id = $cid or title = \"$category\" or slug = \"$category\" limit 0,1");
+        $tmp=$dm_db->get_var("select id from categories where id = $cid or title = \"$category\" or slug = \"$category\" limit 0,1");
         if($tmp) return true;
         return false;
     }
@@ -185,9 +185,9 @@ class Domai_Query{
     public function is_tag($tag){
         //当传递的参数为空时，表示判断当前主查询是否为栏目页 
         if($tag==NULL) return $this->is_tag;
-        global $domai_db;
+        global $dm_db;
         $tid=(is_int($tag))?$tag:0;
-        $tmp = $domai_db->get_var("select id from tags where id = $tid or post_tag = \"$tag\" limit 0,1");
+        $tmp = $dm_db->get_var("select id from tags where id = $tid or post_tag = \"$tag\" limit 0,1");
         if($tmp) return true;
         return false;
     }

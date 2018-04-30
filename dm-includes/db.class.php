@@ -1,8 +1,19 @@
 <?php
 /*
- * 数据库对象
+ * Domai CMS
+ * 哆麦 内容管理系统
+ * Copyright @2018 Hito
+ *
+ * 此文件是系统的数据库操作API
+ * 目前只支持mysql，使用mysqli扩展操作
+ * 所有API参考wordpress的实现
+ *
+ * 注意: 为了保证系统实现简洁方便
+ * 系统所有的SQL操作中的表名称前缀都为'##_'
+ * 系统在进行查询的时候会把'##_'替换成配置文件中制定的table_prefix
+ *
  */
-class SWPDB {
+class DM_DB {
     private $dbuser;
     private $dbpassword;
     private $dbname;
@@ -11,7 +22,8 @@ class SWPDB {
     private $show_errors=false;
     public $insert_id;
 
-	public function __construct($host,$user,$password,$name,$code='utf8'){
+
+	public function __construct($host,$user,$password,$name){
         $this->dbuser=$user;
         $this->dbpassword=$password;
         $this->dbname=$name;
@@ -21,7 +33,6 @@ class SWPDB {
         }
 		$this->connect=mysqli_connect($host,$user,$password);
 		if($this->connect){
-			mysqli_query($this->connect,'set names '.$code);
 			mysqli_select_db($this->connect,$name);
         }
 	}
@@ -29,8 +40,10 @@ class SWPDB {
 	//执行不需要结果的sql:insert update等等
 	public function query($queryString){
         if($queryString==null) return;
+        global $table_prefix;
+        $queryString=str_replace("##_",$table_prefix,$queryString);
 		$result = mysqli_query($this->connect,$queryString);
-        if(preg_match('/^\s*(insert|replace)\s/i',$queryString)){
+        if(preg_match('/^\s*(insert|replace|update)\s/i',$queryString)){
             $this->insert_id=mysqli_insert_id($this->connect);
         }
         if($this->show_errors){
@@ -38,6 +51,11 @@ class SWPDB {
         }
         return $result;
 	}
+
+    //获取插入之后的主键id
+    public function get_insert_id(){
+        return $this->insert_id;
+    }
 
 	//获取一个变量
 	public function get_var($queryString){
