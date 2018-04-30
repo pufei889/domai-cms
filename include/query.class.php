@@ -59,6 +59,11 @@ class Domai_Query{
     public $is_404=false;
 
     /*
+     * 是否为搜索页面
+     */
+    public $is_search=false;
+
+    /*
      * 查询值
      */
     public $query;
@@ -113,7 +118,6 @@ class Domai_Query{
         }else if($this->is_search){
             $search= Domai_Search::get_instance($this->query);
         }
-        
     }
 
     /*

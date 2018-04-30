@@ -23,6 +23,7 @@ create table posts(
     post_title varchar(200) not null,
     post_excerpt varchar(500),
     post_name varchar(255),
+    post_thumbnail varchar(255),
     post_date datetime DEFAULT now(),
     post_category int(4) unsigned not null,
     post_author int unsigned not null,
@@ -35,13 +36,26 @@ create table posts(
 )engine=innodb, charset=utf8;
 
 ##系统模型
-create table model(
+create table model_table(
     id int unsigned primary key auto_increment,
     model_name varchar(50),
-    model_struct text, #系统模型的结构 序列化数组 array("filed_name"=>,"file_type"=>"varchar|char|text","form-type"=>"text|email|file|checkbox|radio","default"=>"");
-                       #附加系统字段结构 post_id int unsigned index, post_thumbnail varchar(255)
     index(model_name)
 )engine=innodb, charset=utf8;
+
+##系统模型字段
+create table model_field(
+    model_id int unsigned not null,
+    field_name varchar(50) not null,
+    field_identifier varchar(50) not null,
+    field_type char(10) not null,
+    field_length int unsigned default 120,
+    field_index boolean default false,
+    field_unique boolean default false,
+    field_form_type varchar(10) not null, 
+    filed_default_value varchar(255) default '',
+    index(model_id)
+)engine=innodb, charset=utf8;
+## 系统模型和系统模型字段共同组成一个完成的系统模型表
 
 ##文章Tag/关键词列表，存放文章或者页面的tag
 create table tags(
@@ -73,14 +87,15 @@ create table options(
 ##系统基础配置项:
 # sitename: 网站名称
 # sitedescription: 网站描述
-# sitekeyword: 网站关键词
+# sitekeywords: 网站关键词
 # siteurl: 网站地址
-# permalink: 固定链接格式
-# fulllink: 链接使用绝对地址
+# sitestatic: 网站是否生成静态文件
 # compress: 生成文件是否gzip压缩
+# permalink: 固定链接格式
 # sitemapsize: 每个sitemap的大小
 # pagesize: 前台栏目列表大小
-
-# poststat: 全部文章统计，格式 array("page"=>10,"post"=>array("total"=>100,"category1"=>99,"category2"=>1))
 # activetemplate: 激活的主题名称
 # filetype: 生成的页面后缀
+# httpcachetime: http缓存时间，秒
+
+# poststat: 全部文章统计，格式 array("page"=>10,"post"=>array("total"=>100,"category1"=>99,"category2"=>1))
