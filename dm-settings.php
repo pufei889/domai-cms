@@ -20,6 +20,9 @@ date_default_timezone_set('Asia/Shanghai');
  * 定义系统全局变量
  */
 
+/** 加载插件模块 此模块主要用来实现插件API */
+require_once(ABSPATH.DMINC.'/plugin.php');
+
 /** 加载系统查询类*/
 require_once(ABSPATH.DMINC.'/query.class.php');
 $dm_query=NULL;
@@ -33,3 +36,4 @@ $dm_db->query('set global time_zone=\'+8:00\'');
 
 /** 定义数据库传输编码*/
 $dm_db->query('set names utf8');
+
