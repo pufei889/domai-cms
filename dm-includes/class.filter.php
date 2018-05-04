@@ -66,6 +66,7 @@ class DM_Filter{
             array_shift($args);
 
         /**遍历所有的filter列表，找到相应的回掉函数，并执行*/
+        if(isset($this->filters[$tag])):
         foreach($this->filters[$tag] as $priority=>$funcs){
             foreach($funcs as $function_to_add=>$accepted_args){
                 $arguments=array_slice($args,0,$accepted_args);
@@ -73,6 +74,7 @@ class DM_Filter{
             }
         }
         unset($this->filters[$tag]);
+        endif;
         return $value;
     }
 

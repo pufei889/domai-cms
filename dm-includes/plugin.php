@@ -33,8 +33,7 @@
  */
 
 /** 加载钩子库*/
-require_once(dirname(__FILE__).'/filter.class.php');
-
+require_once(dirname(__FILE__).'/class.filter.php');
 
 /**
  * 向指定的action或者filter中添加钩子函数

@@ -64,6 +64,21 @@ class DM_Query{
     public $is_search=false;
 
     /*
+     * 是否为robots.txt页面
+     */
+    public $is_robots=false;
+
+    /*
+     * 是否为sitemap.xml页面
+     */
+    public $is_sitemap=false;
+
+    /*
+     * 是否为feed页面
+     */
+    public $is_feed=false;
+
+    /*
      * 查询值
      */
     public $query;
